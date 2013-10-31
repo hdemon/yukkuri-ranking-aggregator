@@ -1,5 +1,6 @@
 require "active_record"
 require "nicoquery"
+require 'log'
 
 
 class PartOneMovie < ActiveRecord::Base
@@ -16,10 +17,10 @@ class PartOneMovie < ActiveRecord::Base
     def get_latest_archived_movie
       movie = self.order("publish_date DESC").first
       if movie.nil?
-        pp "there is no movie in DB."
+        Log.logger.info "there is no movie in DB."
         nil
       else
-        pp "The last part one movie is #{movie.video_id} published at #{movie.publish_date.to_s}."
+        Log.logger.info "The last part one movie is #{movie.video_id} published at #{movie.publish_date.to_s}."
         movie
       end
     end
@@ -34,7 +35,11 @@ class PartOneMovie < ActiveRecord::Base
                             order: :desc
                           ) do |result|
 
-        return :break if result.publish_date <= last_part_one.publish_date
+        Log.logger.info "get #{result.video_id}"
+        if result.publish_date <= last_part_one.publish_date
+          Log.logger.info "tag searching is terminated"
+          return :break
+        end
 
         # TODO 取得動画数が100に満たない時の処理をどうするか、検討する。
         # crawler_proxy.call 100, result do |movie_array|
@@ -52,7 +57,7 @@ class PartOneMovie < ActiveRecord::Base
         :continue
       end
     rescue => exception
-      puts exception
+      Log.logger.error exception
     end
 
     # part 1の動画とその他の動画の組み合わせにおいて、タイトルの編集距離を測る。
