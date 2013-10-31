@@ -1,0 +1,5 @@
+= niconico-ranking-crawler
+
+Generate this with
+    niconico-ranking-crawler rdoc
+After you have described your command line interface

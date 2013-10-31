@@ -1,0 +1,26 @@
+development:
+  adapter: postgresql
+  encoding: utf8
+  database: admin_development
+  pool: 5
+  username: yukkuri
+  password:
+  socket: /tmp/mysql.sock
+
+test:
+  adapter: postgresql
+  encoding: utf8
+  database: admin_test
+  pool: 5
+  username: yukkuri
+  password:
+  socket: /tmp/mysql.sock
+
+production:
+  adapter: postgresql
+  encoding: utf8
+  database: admin_production
+  pool: 5
+  username: yukkuri
+  password:
+  socket: /tmp/mysql.sock
