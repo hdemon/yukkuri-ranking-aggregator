@@ -7,7 +7,7 @@ class PartOneMovie < ActiveRecord::Base
   PART_ONE_TAG = "ゆっくり実況プレイpart1リンク or VOICEROID実況プレイPart1リンク"
 
   class DummyOfEarliest < NicoQuery::Object::Movie
-    def publish_date
+    def self.publish_date
       Time.local(2007, 3, 6, 0, 0, 0) # ニコニコ動画(β)のリリース日
     end
   end
@@ -36,7 +36,7 @@ class PartOneMovie < ActiveRecord::Base
                           ) do |result|
 
         Log.logger.info "get #{result.video_id}"
-        if result.publish_date <= last_part_one.publish_date
+        if result.publish_date <= (last_part_one.publish_date || DummyOfEarliest.publish_date)
           Log.logger.info "tag searching is terminated"
           return :break
         end
@@ -58,6 +58,30 @@ class PartOneMovie < ActiveRecord::Base
       end
     rescue => exception
       Log.logger.error exception
+    end
+
+    # それぞれの動画が持つマイリストから、シリーズをまとめたマイリストと認められるものを
+    # 抽出し、series_mylist_idカラムに保存する。
+    def retrieve_series_mylist
+      mylists = []
+
+      movies = PartOneMovie.order("publish_date DESC")
+
+      series_mylist_ids_of(movies).each do |part_one_movie|
+        m = PartOneMovie.where(video_id: part_one_movie[:video_id]).first
+        # TODO: カラム名をseries_mylist_idにする
+        m.series_mylist = part_one_movie[:series_mylist_id]
+        m.save
+      end
+    end
+
+    def series_mylist_ids_of(movies)
+      @cache ||= movies.map do |part_one_movie|
+        {
+          video_id: part_one_movie.video_id,
+          series_mylist_id: part_one_movie.series_mylist_id
+        }
+      end
     end
 
     # part 1の動画とその他の動画の組み合わせにおいて、タイトルの編集距離を測る。
@@ -100,7 +124,7 @@ class PartOneMovie < ActiveRecord::Base
   # and return its id.
   #
   # @return [Integer] mylist_id
-  def series_mylist
+  def series_mylist_id
     movie = NicoQuery::movie self.video_id
     mylists = referenced_mylists_in movie
 
