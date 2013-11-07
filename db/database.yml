@@ -1,0 +1,6 @@
+adapter: postgresql
+database: yukkuri
+username: write your username
+password: write password
+host: localhost
+

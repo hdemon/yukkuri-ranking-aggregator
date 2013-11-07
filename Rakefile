@@ -4,6 +4,9 @@ require 'rubygems/package_task'
 require 'rdoc/task'
 require 'cucumber'
 require 'cucumber/rake/task'
+require 'active_record'
+require 'yaml'
+require 'logger'
 Rake::RDocTask.new do |rd|
   rd.main = "README.rdoc"
   rd.rdoc_files.include("README.rdoc","lib/**/*.rb","bin/**/*")
@@ -42,3 +45,12 @@ Rake::TestTask.new do |t|
 end
 
 task :default => [:test,:features]
+
+task :migrate => :environment do
+  ActiveRecord::Migrator.migrate('db/migrate', ENV["VERSION"] ? ENV["VERSION"].to_i : nil )
+end
+
+task :environment do
+  ActiveRecord::Base.establish_connection(YAML::load(File.open('db/database.yml')))
+  ActiveRecord::Base.logger = Logger.new(File.open('db/database.log', 'a'))
+end
