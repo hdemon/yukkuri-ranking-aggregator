@@ -1,6 +1,6 @@
-adapter: postgresql
+adapter: mysql2
 database: yukkuri
-username: write your username
-password: write password
+username: root
+password:
 host: localhost
 
