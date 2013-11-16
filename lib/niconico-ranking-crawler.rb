@@ -1,3 +1,11 @@
 require 'niconico-ranking-crawler/version.rb'
 
-require 'database'
+require 'niconico-ranking-crawler/database'
+require 'niconico-ranking-crawler/log'
+require 'niconico-ranking-crawler/movie'
+require 'niconico-ranking-crawler/movie_logs'
+require 'niconico-ranking-crawler/mylist'
+require 'niconico-ranking-crawler/mylist_movie'
+require 'niconico-ranking-crawler/part_one_movie'
+require 'niconico-ranking-crawler/tag'
+require 'niconico-ranking-crawler/niconico'

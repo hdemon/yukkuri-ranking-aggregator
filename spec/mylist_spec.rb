@@ -2,11 +2,10 @@ require 'spec_helper'
 require 'nicoquery'
 require 'fixtures/mylist_31776968'
 require 'fixtures/video_array_for_mylist_31776968'
-require 'mylist'
 
 
 describe Mylist do
-  describe "#mutable_info" do
+  describe "#get_mutable_movie_info_of_all_mylists" do
     before do
       @mylist = FactoryGirl.create(:mylist, mylist_id: 31776968)
       @movies = []

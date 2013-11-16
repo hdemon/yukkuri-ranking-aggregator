@@ -3,13 +3,11 @@ require 'nicoquery'
 require 'fixtures/part_one_movies_from_20130901_to_20130905'
 require 'fixtures/getthumbinfo_sm17675606'
 # sm17675606は、説明文中に以下の4つのマイリストを記載している。
+# 31776968が、sm17675606を含むシリーズのマイリスト
 require 'fixtures/mylist_31776968'
 require 'fixtures/mylist_29776641'
 require 'fixtures/mylist_30544641'
 require 'fixtures/mylist_32098741'
-require 'part_one_movie'
-
-FactoryGirl.find_definitions
 
 
 describe PartOneMovie do
