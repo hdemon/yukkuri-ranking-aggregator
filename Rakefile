@@ -6,6 +6,7 @@ require 'cucumber'
 require 'cucumber/rake/task'
 require 'active_record'
 require 'yaml'
+require 'pry'
 require 'logger'
 Rake::RDocTask.new do |rd|
   rd.main = "README.rdoc"
@@ -53,4 +54,12 @@ end
 task :environment do
   ActiveRecord::Base.establish_connection(YAML::load(File.open('config/database.yml'))[ENV["env"]])
   ActiveRecord::Base.logger = Logger.new(File.open('db/database.log', 'a'))
+end
+
+task :create_database => :environment do
+  config = YAML::load(File.open('config/database.yml'))[ENV["env"]]
+  config.delete 'database'
+  ActiveRecord::Base.establish_connection config
+  dbname = YAML::load(File.open('config/database.yml'))[ENV["env"]]["database"]
+  ActiveRecord::Base.connection.create_database(dbname)
 end
