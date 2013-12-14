@@ -1,6 +1,0 @@
-= niconico-ranking-crawler
-
-Describe your project here
-
-:include:niconico-ranking-crawler.rdoc
-
