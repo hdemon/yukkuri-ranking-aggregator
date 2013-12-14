@@ -6,7 +6,6 @@ require 'cucumber'
 require 'cucumber/rake/task'
 require 'active_record'
 require 'yaml'
-require 'pry'
 require 'logger'
 Rake::RDocTask.new do |rd|
   rd.main = "README.rdoc"
