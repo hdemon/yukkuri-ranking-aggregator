@@ -137,11 +137,9 @@ class PartOneMovie < ActiveRecord::Base
   def contain_part1?(mylists)
     mylists.map do |mylist|
       mylist.movies.map do |movie|
-        movie.tags.map do |tag|
-          tag[:text] == "ゆっくり実況プレイpart1リンク"
-        end.include? true
-      end.include? true
-    end.include? true
+        movie.tags.map { |tag| tag[:text] == "ゆっくり実況プレイpart1リンク" }
+      end
+    end.flatten.include? true
   end
 
   def referenced_mylists_in(movie)
