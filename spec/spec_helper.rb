@@ -6,12 +6,6 @@ require 'active_support/dependencies'
 # loaded once.
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
-require 'database'
-require "database_cleaner"
-require "factory_girl"
-require 'webmock'
-require 'pry'
-
 $:.unshift File.expand_path("../../lib/niconico-ranking-crawler", __FILE__)
 $:.unshift File.expand_path("../../lib", __FILE__)
 $:.unshift File.expand_path("../../config", __FILE__)
@@ -19,6 +13,12 @@ $:.unshift File.expand_path("../../config", __FILE__)
 ActiveSupport::Dependencies.autoload_paths << "lib/niconico-ranking-crawler"
 ActiveSupport::Dependencies.autoload_paths << "lib"
 ActiveSupport::Dependencies.autoload_paths << "config"
+
+require "database"
+require "database_cleaner"
+require "factory_girl"
+require 'webmock'
+require 'pry'
 
 FactoryGirl.find_definitions
 
