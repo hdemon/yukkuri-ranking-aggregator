@@ -14,37 +14,8 @@ Rake::RDocTask.new do |rd|
 end
 
 spec = eval(File.read('niconico-ranking-crawler.gemspec'))
-
-Gem::PackageTask.new(spec) do |pkg|
-end
-CUKE_RESULTS = 'results.html'
-CLEAN << CUKE_RESULTS
-desc 'Run features'
-Cucumber::Rake::Task.new(:features) do |t|
-  opts = "features --format html -o #{CUKE_RESULTS} --format progress -x"
-  opts += " --tags #{ENV['TAGS']}" if ENV['TAGS']
-  t.cucumber_opts =  opts
-  t.fork = false
-end
-
-desc 'Run features tagged as work-in-progress (@wip)'
-Cucumber::Rake::Task.new('features:wip') do |t|
-  tag_opts = ' --tags ~@pending'
-  tag_opts = ' --tags @wip'
-  t.cucumber_opts = "features --format html -o #{CUKE_RESULTS} --format pretty -x -s#{tag_opts}"
-  t.fork = false
-end
-
-task :cucumber => :features
-task 'cucumber:wip' => 'features:wip'
-task :wip => 'features:wip'
-require 'rake/testtask'
-Rake::TestTask.new do |t|
-  t.libs << "test"
-  t.test_files = FileList['test/*_test.rb']
-end
-
-task :default => [:test,:features]
+config = YAML.load_file "./config/database.yml"
+ENV["env"] ||= 'development'
 
 task :migrate => :environment do
   ActiveRecord::Migrator.migrate('db/migrate', ENV["VERSION"] ? ENV["VERSION"].to_i : nil )
@@ -61,4 +32,12 @@ task :create_database => :environment do
   ActiveRecord::Base.establish_connection config
   dbname = YAML::load(File.open('config/database.yml'))[ENV["env"]]["database"]
   ActiveRecord::Base.connection.create_database(dbname)
+end
+
+task :daily do
+  ActiveRecord::Base.establish_connection config[ENV["env"]]
+
+  PartOneMovie.get_latest_part1_movie_from_web
+  PartOneMovie.retrieve_series_mylist
+  # Mylist.get_mutable_movie_info_of_all_mylists
 end

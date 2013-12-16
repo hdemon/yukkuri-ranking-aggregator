@@ -1,7 +1,6 @@
 $:.unshift File.dirname(__FILE__) + "/niconico-ranking-crawler"
 
 require 'version.rb'
-require 'database'
 require 'log'
 require 'movie'
 require 'movie_logs'
