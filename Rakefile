@@ -7,6 +7,8 @@ require 'cucumber/rake/task'
 require 'active_record'
 require 'yaml'
 require 'logger'
+require 'niconico-ranking-crawler'
+
 Rake::RDocTask.new do |rd|
   rd.main = "README.rdoc"
   rd.rdoc_files.include("README.rdoc","lib/**/*.rb","bin/**/*")
@@ -36,8 +38,8 @@ end
 
 task :daily do
   ActiveRecord::Base.establish_connection config[ENV["env"]]
-
-  PartOneMovie.get_latest_part1_movie_from_web
-  PartOneMovie.retrieve_series_mylist
-  # Mylist.get_mutable_movie_info_of_all_mylists
+  Crawler.get_latest_part1_movie_from_web
+  Crawler.retrieve_series_mylist
+  Crawler.get_series_mylist
+  Crawler.get_mutable_movie_info_of_all_mylists
 end

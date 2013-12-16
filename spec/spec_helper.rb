@@ -15,7 +15,6 @@ ActiveSupport::Dependencies.autoload_paths << "lib"
 ActiveSupport::Dependencies.autoload_paths << "config"
 
 require "active_record"
-require "database"
 require "database_cleaner"
 require "factory_girl"
 require 'webmock'

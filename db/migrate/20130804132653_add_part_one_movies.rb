@@ -5,6 +5,7 @@ class AddPartOneMovies < ActiveRecord::Migration
       t.text :mylist_references
       t.datetime :publish_date
       t.integer :series_mylist
+      t.boolean :has_retrieved_series_mylist
 
       t.timestamps
     end

@@ -1,12 +1,18 @@
 require "active_record"
 require "nicoquery"
-require "./lib/niconico-ranking-crawler/utils"
 require "utils"
 require 'log'
 
 
 class PartOneMovie < ActiveRecord::Base
-  PART_ONE_TAG = "ゆっくり実況プレイpart1リンク or VOICEROID実況プレイPart1リンク"
+  scope :latest_archived_movie, -> {
+    self.order("publish_date DESC").first
+  }
+
+  scope :movies_not_having_retrieved_series_mylist, -> {
+    PartOneMovie.where(series_mylist: nil).order("publish_date DESC")
+  }
+
 
   class DummyOfEarliest < NicoQuery::Object::Movie
     def self.publish_date
@@ -15,85 +21,35 @@ class PartOneMovie < ActiveRecord::Base
   end
 
   class << self
-     # DB中の最新の動画を取得
-    def get_latest_archived_movie
-      movie = self.order("publish_date DESC").first
-      if movie.nil?
-        Log.logger.info "there is no movie in DB."
-        nil
-      else
-        Log.logger.info "The last part one movie is #{movie.video_id} published at #{movie.publish_date.to_s}."
-        movie
-      end
-    rescue => exception
-      Log.logger.error exception
-    end
-
-    # ニコ動にはあるが、DB上にはまだ無い最新の動画を取得
-    def get_latest_part1_movie_from_web
-      Log.logger.info "start crawling movie which has #{PART_ONE_TAG} tag."
-      # crawler_proxy = crawler_proxy()
-      last_part_one = self.get_latest_archived_movie
-
-      NicoQuery.tag_search( tag: PART_ONE_TAG,
-                            sort: :published_at,
-                            order: :desc
-                          ) do |result|
-
-        Log.logger.info "get #{result.video_id}"
-
-        if result.publish_date <= (last_part_one.try(:publish_date) || DummyOfEarliest.publish_date)
-          Log.logger.info "tag searching is terminated"
-          return :break
-        end
-
-        # TODO 取得動画数が100に満たない時の処理をどうするか、検討する。
-        # crawler_proxy.call 100, result do |movie_array|
-          # movie_array.each do |elem|
-            m = self.new
-            m.video_id = result.video_id
-            # TODO: pgの配列型を利用する方法を検討。
-            m.mylist_references = result.description.mylist_references.join(' ')
-            m.publish_date = result.publish_date
-
-            m.save
-          # end
-        # end
-
-        :continue
-      end
-
-      Log.logger.info "crawling movie which has #{PART_ONE_TAG} tag is finished."
-    rescue => exception
-      Log.logger.error exception
-    end
-
     # それぞれの動画が持つマイリストから、シリーズをまとめたマイリストと認められるものを
     # 抽出し、series_mylist_idカラムに保存する。
     def retrieve_series_mylist
-      Log.logger.info "start retrieving series mylists."
+      $logger.info "start retrieving series mylists."
       mylists = []
-      movies = PartOneMovie.order("publish_date DESC")
 
-      series_mylist_ids_of(movies).each do |part_one_movie|
-        Log.logger.info "retrieving series mylists in #{part_one_movie[:video_id]}."
+      # where.not(hoge: true)としたいが、その場合hoge: nilが感知されない。
+      movies = PartOneMovie.where(series_mylist: nil).order("publish_date DESC")
+      # movies = PartOneMovie.order("publish_date DESC")
+
+      series_mylist_ids_of(movies) do |part_one_movie|
         m = PartOneMovie.where(video_id: part_one_movie[:video_id]).first
         # TODO: カラム名をseries_mylist_idにする
         m.series_mylist = part_one_movie[:series_mylist_id]
         m.save
+        $logger.info "saved movie:#{m.series_mylist} as series mylist of #{part_one_movie[:video_id]}."
       end
 
-      Log.logger.info "retrieving series mylists is finished."
+      $logger.info "retrieving series mylists is finished."
     rescue => exception
-      Log.logger.error exception
+      $logger.error exception
     end
 
-    def series_mylist_ids_of(movies)
-      @cache ||= movies.map do |part_one_movie|
-        {
+    def series_mylist_ids_of(movies, &block)
+      movies.each do |part_one_movie|
+        block.call({
           video_id: part_one_movie.video_id,
           series_mylist_id: part_one_movie.series_mylist_id
-        }
+        })
       end
     end
 
@@ -108,23 +64,29 @@ class PartOneMovie < ActiveRecord::Base
   #
   # @return [Integer] mylist_id
   def series_mylist_id
+    $logger.info "start retrieving series mylist from movie:#{self.video_id}"
     movie = NicoQuery::movie self.video_id
+    return unless movie.available?
     mylists = referenced_mylists_in movie
 
     unless contain_part1? mylists
-      Log.logger.info "#{movie.video_id}: this movie doesn't contain series mylist."
+      $logger.info "movie:#{movie.video_id} doesn't contain series mylist."
       return
     end
 
     medians_of_levenshtein = mylists.map do |mylist|
-      0 if mylist.movies.empty?
-      {
-        mylist_id: mylist.mylist_id,
-        median: median_of_levenshtein_distances(from: mylist.movies, to: movie)
-      }
+      # 動画を含まないマイリストへの対応
+      if mylist.movies.blank?
+        median = 0
+      else
+        median = median_of_levenshtein_distances(from: mylist.movies, to: movie)
+      end
+
+      { mylist_id: mylist.mylist_id, median: median }
     end
 
     min = medians_of_levenshtein.min { |a, b| a[:median] <=> b[:median] }
+    $logger.info "#{movie.video_id}: #{min[:mylist_id]} is series mylist."
     min[:mylist_id]
   end
 
@@ -135,15 +97,24 @@ class PartOneMovie < ActiveRecord::Base
   end
 
   def contain_part1?(mylists)
+    return false if mylists.blank?
+
     mylists.map do |mylist|
       mylist.movies.map do |movie|
-        movie.tags.map { |tag| tag[:text] == "ゆっくり実況プレイpart1リンク" }
-      end
-    end.flatten.include? true
+        unless movie.tags.blank?
+          movie.tags.map { |tag| tag[:text] == "ゆっくり実況プレイpart1リンク" }
+        else 
+          [false]
+        end.include? true
+      end.include? true
+    end.include? true
   end
 
   def referenced_mylists_in(movie)
+    return [] if movie.description.nil?
+
     mylists = []
+    # TODO: each_with_indexで書きなおす
     movie.description.mylist_references.each do |mylist_id|
       mylist = NicoQuery.mylist(mylist_id.to_i)
 
