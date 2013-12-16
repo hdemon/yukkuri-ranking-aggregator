@@ -75,6 +75,63 @@ module Crawler
     end
   end
 
+  def get_series_mylists
+    movies = PartOneMovie.movies_having_retrieved_series_mylist
+
+    movies.each do |movie|
+      if Mylist.where(mylist_id: movie.series_mylist).empty?
+        $logger.info "Get mylist #{movie.series_mylist} as series mylist."
+      else
+        next
+      end
+
+      ml = NicoQuery.mylist movie.series_mylist
+
+      new_mylist = Mylist.new
+      new_mylist.mylist_id = ml.mylist_id
+      new_mylist.creator = ml.creator
+      new_mylist.title = ml.title
+      new_mylist.url = ml.url
+
+      new_movies = []
+      new_mylist_movies = []
+      i = 0
+
+      ml.movies.each do |movie|
+        new_movies[i] = Movie.new
+        new_movies[i].video_id = movie.video_id
+        new_movies[i].thread_id = movie.thread_id
+        new_movies[i].url = movie.url
+        new_movies[i].title = movie.title
+        new_movies[i].description = movie.description
+        new_movies[i].thumbnail_url = movie.thumbnail_url
+        new_movies[i].publish_date = movie.publish_date
+        new_movies[i].length = movie.length
+
+        i += 1
+      end
+      
+      ActiveRecord::Base.transaction do
+        new_mylist.save
+
+        new_movies.each do |movie| 
+          movie.save
+
+          mm = MylistMovie.new
+          mm.movie_id = movie.id
+          mm.mylist_id = new_mylist.id
+          mm.save
+        end
+      end
+
+      $logger.info "Completed saving mylist:#{new_mylist.mylist_id} and its movies into DB."
+    end
+
+    $logger.info "Completed getting series mylists."
+  rescue => exception
+    $logger.error exception
+  end
+
   def get_mutable_movie_info_of_all_mylists
     Mylist.all.each do |mylist|
       m = NicoQuery.mylist mylist.mylist_id
@@ -99,9 +156,12 @@ module Crawler
         movie_log.save
       end
     end
+  rescue => exception
+    $logger.error exception
   end
 
-  module_function :get_mutable_movie_info_of_all_mylists
   module_function :get_latest_part1_movie_from_web
+  module_function :get_series_mylists
+  module_function :get_mutable_movie_info_of_all_mylists
 end
 

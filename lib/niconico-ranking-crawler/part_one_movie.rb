@@ -13,6 +13,9 @@ class PartOneMovie < ActiveRecord::Base
     PartOneMovie.where(series_mylist: nil).order("publish_date DESC")
   }
 
+  scope :movies_having_retrieved_series_mylist, -> {
+    PartOneMovie.where("series_mylist IS NOT NULL")
+  }
 
   class DummyOfEarliest < NicoQuery::Object::Movie
     def self.publish_date
@@ -21,37 +24,6 @@ class PartOneMovie < ActiveRecord::Base
   end
 
   class << self
-    # それぞれの動画が持つマイリストから、シリーズをまとめたマイリストと認められるものを
-    # 抽出し、series_mylist_idカラムに保存する。
-    def retrieve_series_mylist
-      $logger.info "start retrieving series mylists."
-      mylists = []
-
-      # where.not(hoge: true)としたいが、その場合hoge: nilが感知されない。
-      movies = PartOneMovie.where(series_mylist: nil).order("publish_date DESC")
-      # movies = PartOneMovie.order("publish_date DESC")
-
-      series_mylist_ids_of(movies) do |part_one_movie|
-        m = PartOneMovie.where(video_id: part_one_movie[:video_id]).first
-        # TODO: カラム名をseries_mylist_idにする
-        m.series_mylist = part_one_movie[:series_mylist_id]
-        m.save
-        $logger.info "saved movie:#{m.series_mylist} as series mylist of #{part_one_movie[:video_id]}."
-      end
-
-      $logger.info "retrieving series mylists is finished."
-    rescue => exception
-      $logger.error exception
-    end
-
-    def series_mylist_ids_of(movies, &block)
-      movies.each do |part_one_movie|
-        block.call({
-          video_id: part_one_movie.video_id,
-          series_mylist_id: part_one_movie.series_mylist_id
-        })
-      end
-    end
 
   end
 

@@ -68,7 +68,7 @@ GEM
       activesupport (~> 4.0.0)
       i18n
       rest-client
-    nicoquery (0.1.8.5)
+    nicoquery (0.1.8.6)
       activesupport (~> 4.0.0)
       i18n
       nicoapi
