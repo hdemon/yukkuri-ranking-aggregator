@@ -3,10 +3,12 @@ require 'logger'
 
 # see http://twei55.github.io/blog/2012/01/26/ruby-singleton-logger/
 class Log < Logger
-  LOG_FILE = File.open("log/crawler.log", "a")
+  include Singleton
+  LOG_FILE = File.open("/var/log/crawler.log", "a")
 
-  def self.logger
-    @@log ||= Logger.new(LOG_FILE, :daily)
+  def initialize
+    @logdev = Logger::LogDevice.new(LOG_FILE, :daily)
+    @level = INFO
   end
 
   def set_log_level
@@ -18,5 +20,9 @@ class Log < Logger
     when :debug then Logger::DEBUG
     else :warn
     end
+  end
+
+  def self.logger
+    return Log.instance
   end
 end

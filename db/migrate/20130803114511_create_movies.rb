@@ -9,8 +9,9 @@ class CreateMovies < ActiveRecord::Migration
       t.string :thumbnail_url
       t.datetime :publish_date
       t.integer :length
-
       t.timestamps
     end
+
+    add_index :movies, [:thread_id], unique: true
   end
 end

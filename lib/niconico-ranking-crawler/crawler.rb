@@ -24,17 +24,19 @@ module Crawler
                           order: :desc
                         ) do |result|
 
-      $logger.info "scrape #{result.video_id}"
       if result.publish_date <= (last_part_one.try(:publish_date) || PartOneMovie::DummyOfEarliest.publish_date)
         $logger.info "Tag searching is terminated."
         return :break
       end
 
+      $logger.info "Scraping #{result.video_id}"
       m = PartOneMovie.new
       m.video_id = result.video_id
       m.mylist_references = result.description.mylist_references.join(' ')
       m.publish_date = result.publish_date
+      m.has_retrieved_series_mylist = false
       m.save
+      $logger.info "#{result.video_id} is stored into DB."
 
       :continue
     end
@@ -46,17 +48,19 @@ module Crawler
 
   # それぞれの動画が持つマイリストから、シリーズをまとめたマイリストと認められるものを
   # 抽出し、series_mylist_idカラムに保存する。
-  def retrieve_series_mylist
+  def retrieve_series_mylists
     $logger.info "Retrieving series mylists is started."
     mylists = []
 
     # where.not(hoge: true)としたいが、その場合hoge: nilが感知されない。
-    movies = PartOneMovie.where(series_mylist: nil).order("publish_date DESC")
+    movies = PartOneMovie.where(has_retrieved_series_mylist: false)
+                         .order("publish_date DESC")
 
     series_mylist_ids_of(movies) do |part_one_movie|
       m = PartOneMovie.where(video_id: part_one_movie[:video_id]).first
       # TODO: カラム名をseries_mylist_idにする
       m.series_mylist = part_one_movie[:series_mylist_id]
+      m.has_retrieved_series_mylist = true
       m.save
       $logger.info "Saving movie:#{m.series_mylist} as series mylist of #{part_one_movie[:video_id]} is completed successfully."
     end
@@ -80,13 +84,7 @@ module Crawler
     movies = PartOneMovie.movies_having_retrieved_series_mylist
 
     movies.each do |movie|
-      $logger.info "Getting mylist:#{new_mylist.mylist_id} and its movies is started."
-
-      if Mylist.where(mylist_id: movie.series_mylist).empty?
-        $logger.info "Get mylist #{movie.series_mylist} as series mylist."
-      else
-        next
-      end
+      next unless Mylist.where(mylist_id: movie.series_mylist).empty?
 
       ml = NicoQuery.mylist movie.series_mylist
 
@@ -176,6 +174,8 @@ module Crawler
   end
 
   module_function :get_latest_part1_movie_from_web
+  module_function :retrieve_series_mylists
+  module_function :series_mylist_ids_of
   module_function :get_series_mylists
   module_function :get_mutable_movie_info_of_all_mylists
 end

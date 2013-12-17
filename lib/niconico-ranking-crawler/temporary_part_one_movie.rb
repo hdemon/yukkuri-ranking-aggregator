@@ -23,6 +23,10 @@ class PartOneMovie < ActiveRecord::Base
     end
   end
 
+  class << self
+
+  end
+
   def mylist_references_array
     self.mylist_references.split(' ').map(&:to_i)
   end
