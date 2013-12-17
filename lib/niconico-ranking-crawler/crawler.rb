@@ -1,22 +1,19 @@
 require "nicoquery"
 
 
-$logger = Logger.new STDOUT
-$logger.level = Logger::INFO
-
 module Crawler
   PART_ONE_TAG = "ゆっくり実況プレイpart1リンク or VOICEROID実況プレイPart1リンク"
 
   # ニコ動にはあるが、DB上にはまだ無い最新の動画を取得
   def get_latest_part1_movie_from_web
-    $logger.info "Getting movies which has #{PART_ONE_TAG} tag is started."
+    Log.logger.info "Getting movies which has #{PART_ONE_TAG} tag is started."
 
     last_part_one = PartOneMovie.latest_archived_movie
   
     if last_part_one.nil?
-      $logger.info "There is no part one movie in DB."
+      Log.logger.info "There is no part one movie in DB."
     else
-      $logger.info "The last part one movie is #{last_part_one.video_id} published at #{last_part_one.publish_date.to_s}."
+      Log.logger.info "The last part one movie is #{last_part_one.video_id} published at #{last_part_one.publish_date.to_s}."
     end
 
     NicoQuery.tag_search( tag: PART_ONE_TAG,
@@ -25,31 +22,31 @@ module Crawler
                         ) do |result|
 
       if result.publish_date <= (last_part_one.try(:publish_date) || PartOneMovie::DummyOfEarliest.publish_date)
-        $logger.info "Tag searching is terminated."
+        Log.logger.info "Tag searching is terminated."
         return :break
       end
 
-      $logger.info "Scraping #{result.video_id}"
+      Log.logger.info "Scraping #{result.video_id}"
       m = PartOneMovie.new
       m.video_id = result.video_id
       m.mylist_references = result.description.mylist_references.join(' ')
       m.publish_date = result.publish_date
       m.has_retrieved_series_mylist = false
       m.save
-      $logger.info "#{result.video_id} is stored into DB."
+      Log.logger.info "#{result.video_id} is stored into DB."
 
       :continue
     end
 
-    $logger.info "Getting movies which has #{PART_ONE_TAG} tag is completed."
+    Log.logger.info "Getting movies which has #{PART_ONE_TAG} tag is completed."
   rescue => exception
-    $logger.error exception
+    Log.logger.error exception
   end
 
   # それぞれの動画が持つマイリストから、シリーズをまとめたマイリストと認められるものを
   # 抽出し、series_mylist_idカラムに保存する。
   def retrieve_series_mylists
-    $logger.info "Retrieving series mylists is started."
+    Log.logger.info "Retrieving series mylists is started."
     mylists = []
 
     # where.not(hoge: true)としたいが、その場合hoge: nilが感知されない。
@@ -62,12 +59,12 @@ module Crawler
       m.series_mylist = part_one_movie[:series_mylist_id]
       m.has_retrieved_series_mylist = true
       m.save
-      $logger.info "Saving movie:#{m.series_mylist} as series mylist of #{part_one_movie[:video_id]} is completed successfully."
+      Log.logger.info "Saving movie:#{m.series_mylist} as series mylist of #{part_one_movie[:video_id]} is completed successfully."
     end
 
-    $logger.info "Retrieving series mylists is completed."
+    Log.logger.info "Retrieving series mylists is completed."
   rescue => exception
-    $logger.error exception
+    Log.logger.error exception
   end
 
   def series_mylist_ids_of(movies, &block)
@@ -80,7 +77,7 @@ module Crawler
   end
 
   def get_series_mylists
-    $logger.info "Getting series mylists is started."
+    Log.logger.info "Getting series mylists is started."
     movies = PartOneMovie.movies_having_retrieved_series_mylist
 
     movies.each do |movie|
@@ -125,30 +122,30 @@ module Crawler
         end
       end
 
-      $logger.info "Saving mylist:#{new_mylist.mylist_id} and its movies into DB is completed successfully."
+      Log.logger.info "Saving mylist:#{new_mylist.mylist_id} and its movies into DB is completed successfully."
     end
 
-    $logger.info "Getting series mylists is completed."
+    Log.logger.info "Getting series mylists is completed."
   rescue => exception
-    $logger.error exception
+    Log.logger.error exception
   end
 
   def get_mutable_movie_info_of_all_mylists
-    $logger.info "Getting movies info in all of stored mylists is started."
+    Log.logger.info "Getting movies info in all of stored mylists is started."
 
     Mylist.all.each do |mylist|
-      $logger.info "target is mylist:#{mylist.mylist_id}"
+      Log.logger.info "target is mylist:#{mylist.mylist_id}"
       mylist_obj = NicoQuery.mylist mylist.mylist_id
 
       video_id_array = mylist_obj.movies.map(&:video_id)
       movies = NicoQuery.movie(video_id_array)
 
       movies.each do |movie|
-        $logger.info "Start getting info of movie:#{movie.video_id}"
+        Log.logger.info "Start getting info of movie:#{movie.video_id}"
         movie_log = MovieLogs.new
 
         if Movie.where(video_id: movie.video_id).empty?
-          $logger.info "Skipped saving movie log of movie:#{movie.video_id} because of non-existent movie info in movie table."
+          Log.logger.info "Skipped saving movie log of movie:#{movie.video_id} because of non-existent movie info in movie table."
           next 
         end
 
@@ -164,13 +161,13 @@ module Crawler
         end
 
         movie_log.save
-        $logger.info "Completed getting info of movie:#{movie.video_id}"
+        Log.logger.info "Completed getting info of movie:#{movie.video_id}"
       end
     end
 
-    $logger.info "Getting movies info in all of stored mylists is completed." 
+    Log.logger.info "Getting movies info in all of stored mylists is completed." 
   rescue => exception
-    $logger.error exception
+    Log.logger.error exception
   end
 
   module_function :get_latest_part1_movie_from_web
