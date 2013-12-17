@@ -20,19 +20,22 @@ lib/niconico-ranking-crawler.rb
   s.rdoc_options << '--title' << 'niconico-ranking-crawler' << '--main' << 'README.rdoc' << '-ri'
   s.bindir = 'bin'
   s.executables << 'niconico-ranking-crawler'
-  s.add_development_dependency('rake')
-  s.add_development_dependency('rdoc')
-  s.add_development_dependency('aruba')
-  s.add_development_dependency('rspec')
-  s.add_development_dependency('webmock')
-  s.add_development_dependency('database_cleaner')
-  s.add_development_dependency('factory_girl')
-  s.add_development_dependency('ffaker')
-  s.add_development_dependency('pry')
+  s.add_development_dependency 'rake'
+  s.add_development_dependency 'rdoc'
+  s.add_development_dependency 'aruba'
+  s.add_development_dependency 'rspec'
+  s.add_development_dependency 'webmock'
+  s.add_development_dependency 'database_cleaner'
+  s.add_development_dependency 'factory_girl'
+  s.add_development_dependency 'ffaker'
+  s.add_development_dependency 'pry'
 
-  s.add_runtime_dependency('gli','2.8.1')
-  s.add_runtime_dependency('nicoquery')
-  s.add_runtime_dependency('mysql2')
-  s.add_runtime_dependency('activerecord', '~>4.0.0')
-  s.add_runtime_dependency('configatron', '3.0.0.rc1')
+  s.add_runtime_dependency 'gli','2.8.1'
+  s.add_runtime_dependency 'nicoquery'
+  s.add_runtime_dependency 'mysql2'
+  s.add_runtime_dependency 'activerecord', '~>4.0.0'
+  s.add_runtime_dependency 'configatron', '3.0.0.rc1'
+  s.add_runtime_dependency 'capistrano'
+  s.add_runtime_dependency 'capistrano-rbenv'
+  s.add_runtime_dependency 'capistrano-console'
 end
