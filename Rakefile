@@ -40,6 +40,6 @@ task :daily do
   ActiveRecord::Base.establish_connection config[ENV["env"]]
   # Crawler.get_latest_part1_movie_from_web
   # Crawler.retrieve_series_mylist
-  Crawler.get_series_mylists
+  # Crawler.get_series_mylists
   Crawler.get_mutable_movie_info_of_all_mylists
 end
