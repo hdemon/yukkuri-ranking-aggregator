@@ -1,20 +1,13 @@
 set :application, 'yukkuri-crawler'
-set :repo_url, 'git@github.com:hdemon/niconico-ranking-crawler.git'
-
-# ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }
-
-set :deploy_to, '~/yukkuri-crawler'
 set :scm, :git
+set :repo_url, 'git@github.com:hdemon/niconico-ranking-crawler.git'
+set :deploy_to, '/home/yukkuri/yukkuri-crawler'
 
-# set :format, :pretty
-# set :log_level, :debug
-# set :pty, true
+# it required to execute bundle command with rbenv env
+# see http://stackoverflow.com/questions/19716131/usr-bin-env-ruby-no-such-file-or-directory-using-capistrano-3-capistrano-rben
+set :default_env, { path: "~/rbenv/shims:~/rbenv/bin:$PATH" }
+set :rbenv_ruby, '2.1.0-preview2'
 
-# set :linked_files, %w{config/database.yml}
-# set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
-
-# set :default_env, { path: "/opt/ruby/bin:$PATH" }
-# set :keep_releases, 5
 
 namespace :deploy do
 

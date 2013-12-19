@@ -7,7 +7,7 @@ set :ssh_options, {
 }
 
 # It assumes that we deploy application to virtual machine controled by vagrant.
-server '127.0.0.1', user: 'yukkuri', port: 2222, roles: %w{web app}, my_property: :my_value
+server '127.0.0.1', user: 'yukkuri', port: 2222, roles: %w{web app}
 
 # you can set custom ssh options
 # it's possible to pass any option but you need to keep in mind that net/ssh understand limited list of options

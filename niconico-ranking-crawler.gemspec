@@ -37,5 +37,6 @@ lib/niconico-ranking-crawler.rb
   s.add_runtime_dependency 'configatron', '3.0.0.rc1'
   s.add_runtime_dependency 'capistrano'
   s.add_runtime_dependency 'capistrano-rbenv'
+  s.add_runtime_dependency 'capistrano-bundler'
   s.add_runtime_dependency 'capistrano-console'
 end
