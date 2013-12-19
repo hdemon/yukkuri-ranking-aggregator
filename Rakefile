@@ -1,9 +1,6 @@
 require 'rake/clean'
 require 'rubygems'
 require 'rubygems/package_task'
-require 'rdoc/task'
-require 'cucumber'
-require 'cucumber/rake/task'
 require 'active_record'
 require 'yaml'
 require 'logger'
@@ -41,5 +38,5 @@ task :daily do
   Crawler.get_latest_part1_movie_from_web
   Crawler.retrieve_series_mylists
   Crawler.get_series_mylists
-  # Crawler.get_mutable_movie_info_of_all_mylists
+  Crawler.get_mutable_movie_info_of_all_mylists
 end
