@@ -6,12 +6,6 @@ require 'yaml'
 require 'logger'
 require 'niconico-ranking-crawler'
 
-Rake::RDocTask.new do |rd|
-  rd.main = "README.rdoc"
-  rd.rdoc_files.include("README.rdoc","lib/**/*.rb","bin/**/*")
-  rd.title = 'Your application title'
-end
-
 spec = eval(File.read('niconico-ranking-crawler.gemspec'))
 config = YAML.load_file "./config/database.yml"
 ENV["env"] ||= 'development'
