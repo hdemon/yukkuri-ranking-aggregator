@@ -5,7 +5,8 @@ require 'logger'
 class Log
   include Singleton
   attr_reader :logger
-  LOG_FILE = File.open("/var/log/crawler.log", "a")
+
+  LOG_FILE = File.open(YAML.load_file("config/crawler.yml")["log_file_path"], "a")
 
   def initialize
     @logger = Logger.new LOG_FILE, 'daily'
