@@ -28,6 +28,17 @@ namespace :deploy do
     end
   end
 
-  after :finishing, 'deploy:cleanup'
+  task :migrate do
+    on roles(:web) do
+      execute "echo #{release_path}"
+      within release_path do
+        execute "mkdir /home/yukkuri/log -p"
+        execute "cd /home/yukkuri/yukkuri-crawler/current && ( PATH=~/rbenv/shims:~/rbenv/bin:$PATH bundle exec rake db:migrate ENV=production )"
+        # execute :rake, "db:migrate"
+      end
+    end
+  end
 
+  after :finishing, 'deploy:cleanup'
+  after 'deploy:published', 'deploy:migrate'
 end
