@@ -10,10 +10,10 @@ module Crawler
 
     last_part_one = PartOneMovie.latest_archived_movie
   
-    if last_part_one.nil?
-      Log.logger.info "There is no part one movie in DB."
-    else
+    if last_part_one.present?
       Log.logger.info "The last part one movie is #{last_part_one.video_id} published at #{last_part_one.publish_date.to_s}."
+    else
+      Log.logger.info "There is no part one movie in DB."
     end
 
     NicoQuery.tag_search( tag: PART_ONE_TAG,
@@ -49,8 +49,7 @@ module Crawler
     Log.logger.info "Retrieving series mylists is started."
     mylists = []
 
-    # where.not(hoge: true)としたいが、その場合hoge: nilが感知されない。
-    movies = PartOneMovie.where(has_retrieved_series_mylist: false)
+    movies = PartOneMovie.where("has_retrieved_series_mylist = false OR has_retrieved_series_mylist IS NULL")
                          .order("publish_date DESC")
 
     series_mylist_ids_of(movies) do |part_one_movie|

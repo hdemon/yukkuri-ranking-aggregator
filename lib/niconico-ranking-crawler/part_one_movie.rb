@@ -32,13 +32,13 @@ class PartOneMovie < ActiveRecord::Base
   #
   # @return [Integer] mylist_id
   def series_mylist_id
-    $logger.info "start retrieving series mylist from movie:#{self.video_id}"
+    Log.logger.info "start retrieving series mylist from movie:#{self.video_id}"
     movie = NicoQuery::movie self.video_id
     return unless movie.available?
     mylists = referenced_mylists_in movie
 
     unless contain_part1? mylists
-      $logger.info "movie:#{movie.video_id} doesn't contain series mylist."
+      Log.logger.info "movie:#{movie.video_id} doesn't contain series mylist."
       return
     end
 
@@ -54,7 +54,7 @@ class PartOneMovie < ActiveRecord::Base
     end
 
     min = medians_of_levenshtein.min { |a, b| a[:median] <=> b[:median] }
-    $logger.info "#{movie.video_id}: #{min[:mylist_id]} is series mylist."
+    Log.logger.info "#{movie.video_id}: #{min[:mylist_id]} is series mylist."
     min[:mylist_id]
   end
 

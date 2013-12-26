@@ -11,6 +11,7 @@ PATH
       gli (= 2.8.1)
       mysql2
       nicoquery
+      pry
       whenever
 
 GEM
@@ -105,7 +106,7 @@ GEM
       coderay (~> 1.0)
       method_source (~> 0.8)
       slop (~> 3.4)
-    rake (10.1.0)
+    rake (10.1.1)
     rdoc (4.0.1)
       json (~> 1.4)
     rest-client (1.6.7)
@@ -133,6 +134,9 @@ GEM
     webmock (1.16.1)
       addressable (>= 2.2.7)
       crack (>= 0.3.2)
+    whenever (0.9.0)
+      activesupport (>= 2.3.4)
+      chronic (>= 0.6.3)
 
 PLATFORMS
   ruby
@@ -148,3 +152,4 @@ DEPENDENCIES
   rdoc
   rspec
   webmock
+  whenever
