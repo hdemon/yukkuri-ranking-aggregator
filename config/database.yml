@@ -1,0 +1,49 @@
+local:
+  adapter: mysql2
+  encoding: utf8
+  database: yukkuri_dev
+  pool: 5
+  username: root
+  password:
+  # for osx
+  socket: /tmp/mysql.sock
+
+# vagrant vm
+development:
+  adapter: mysql2
+  encoding: utf8
+  database: yukkuri
+  pool: 5
+  username: root
+  password:
+  # socket location supposes ubuntu
+  socket: /var/run/mysqld/mysqld.sock
+
+test:
+  adapter: mysql2
+  encoding: utf8
+  database: yukkuri_test
+  pool: 5
+  username: root
+  password:
+  socket: /var/run/mysqld/mysqld.sock
+
+staging:
+  adapter: mysql2
+  encoding: utf8
+  database: yukkuri
+  pool: 5
+  username: yukkuri
+  password: fill this line with your password
+  socket: /var/run/mysqld/mysqld.sock
+
+production:
+  adapter: mysql2
+  encoding: utf8
+  database: yukkuri
+  pool: 5
+  username: yukkuri
+  password: fill this line with your password
+  socket: /var/run/mysqld/mysqld.sock
+
+
