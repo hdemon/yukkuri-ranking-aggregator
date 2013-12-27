@@ -1,7 +1,6 @@
 set :application, 'yukkuri-crawler'
 set :scm, :git
 set :repo_url, 'git@bitbucket.org:hdemon/yukkuri-crawler.git'
-set :branch, 'private-master'
 set :deploy_to, '/home/yukkuri/yukkuri-crawler'
 set :rbenv_ruby, '2.1.0'
 # it required to execute bundle command with rbenv env
