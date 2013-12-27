@@ -45,5 +45,3 @@ production:
   username: yukkuri
   password: fill this line with your password
   socket: /var/run/mysqld/mysqld.sock
-
-
