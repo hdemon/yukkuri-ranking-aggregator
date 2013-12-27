@@ -7,5 +7,5 @@ set :output, "~/cron_log.log"
 
 # utc
 every 1.day, :at => '5:10 am' do
-  command "cd /home/yukkuri/yukkuri-crawler/releases/current && RAILS_ENV=production bundle exec rake daily ENV=production"
+  command "cd /home/yukkuri/yukkuri-crawler/releases/current && bundle exec rake daily ENV=production"
 end
