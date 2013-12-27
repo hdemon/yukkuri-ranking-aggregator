@@ -2,11 +2,12 @@ set :application, 'yukkuri-crawler'
 set :scm, :git
 set :repo_url, 'git@github.com:hdemon/niconico-ranking-crawler.git'
 set :deploy_to, '/home/yukkuri/yukkuri-crawler'
-
+set :rbenv_ruby, '2.1.0'
 # it required to execute bundle command with rbenv env
 # see http://stackoverflow.com/questions/19716131/usr-bin-env-ruby-no-such-file-or-directory-using-capistrano-3-capistrano-rben
+set :bundle_flags, ''
 set :default_env, { path: "~/rbenv/shims:~/rbenv/bin:$PATH" }
-set :rbenv_ruby, '2.1.0-preview2'
+set :whenever_roles, :web
 
 
 namespace :deploy do
