@@ -80,7 +80,7 @@ module Crawler
     movies = PartOneMovie.movies_having_retrieved_series_mylist
 
     movies.each do |movie|
-      next unless Mylist.where(mylist_id: movie.series_mylist).empty?
+      next if Mylist.where(mylist_id: movie.series_mylist).present?
 
       ml = NicoQuery.mylist movie.series_mylist
 
@@ -109,17 +109,17 @@ module Crawler
 
         i += 1
       end
-      
+
       ActiveRecord::Base.transaction do
         new_mylist.save if Mylist.where(mylist_id: new_mylist.mylist_id).empty?
 
-        new_movies.each do |movie| 
+        new_movies.each do |movie|
           movie.save
 
           mm = MylistMovie.new
           mm.movie_id = movie.id
           mm.mylist_id = new_mylist.id
-          mm.save unless MylistMovie.where(mylist_id: new_mylist.id).where(movie_id: movie.id).empty?
+          mm.save if MylistMovie.where(mylist_id: new_mylist.id).where(movie_id: movie.id).empty?
         end
       end
 
@@ -147,7 +147,7 @@ module Crawler
 
         if Movie.where(video_id: movie.video_id).empty?
           Log.logger.info "Skipped saving movie log of movie:#{movie.video_id} because of non-existent movie info in movie table."
-          next 
+          next
         end
 
         movie_log.movie_id = Movie.where(video_id: movie.video_id).first.id
