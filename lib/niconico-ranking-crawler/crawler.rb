@@ -118,6 +118,7 @@ module Crawler
           mm = MylistsMovies.new
           mm.movie_id = movie.id
           mm.mylist_id = new_mylist.id
+
           mm.save if MylistsMovies.where(mylist_id: new_mylist.id).where(movie_id: movie.id).empty?
         end
       end
@@ -193,7 +194,7 @@ module Crawler
   end
 
   def self.save_logs_of movie
-    now = Time.now 
+    now = Time.now
     movie_log = MovieLog.new
     movie_log.movie_id = Movie.where(video_id: movie.video_id).first.id
     movie_log.view_counter = movie.view_counter
