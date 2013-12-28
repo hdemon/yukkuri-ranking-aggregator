@@ -71,7 +71,7 @@ describe Crawler do
           with(:headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate', 'User-Agent'=>'Ruby'}).
           to_return(:status => 200, :body => Fixture.mylist_2001, :headers => {})
 
-        PartOneMovie.retrieve_series_mylist
+        Crawler.retrieve_series_mylists
       end
 
       subject { PartOneMovie.first }

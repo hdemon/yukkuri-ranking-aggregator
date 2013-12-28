@@ -5,7 +5,7 @@ local:
   pool: 5
   username: root
   password:
-  # for osx
+  # it is for osx. if you use different os, you should specify the proper location.
   socket: /tmp/mysql.sock
 
 # vagrant vm
@@ -26,7 +26,7 @@ test:
   pool: 5
   username: root
   password:
-  socket: /var/run/mysqld/mysqld.sock
+  socket: /tmp/mysql.sock
 
 staging:
   adapter: mysql2
