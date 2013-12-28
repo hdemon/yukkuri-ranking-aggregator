@@ -6,13 +6,20 @@ class Log
   include Singleton
   attr_reader :logger
 
-  LOG_FILE = File.open(YAML.load_file("config/crawler.yml")["log_file_path"], "a")
-
   def initialize
-    @logger = Logger.new LOG_FILE, 'daily'
+    @logger = Logger.new log_file, 'daily'
   end
 
   def self.logger
     return Log.instance.logger
+  end
+
+  def log_file
+    env = test_env? ? "test" : [ENV["NICO_CRAWLER_ENV"]]
+    File.open(YAML.load_file("config/crawler.yml")["log_file_path"][env], "a")
+  end
+
+  def test_env?
+    $test_env == true
   end
 end
