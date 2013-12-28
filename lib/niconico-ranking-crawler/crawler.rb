@@ -9,7 +9,7 @@ module Crawler
     Log.logger.info "Getting movies which has #{PART_ONE_TAG} tag is started."
 
     last_part_one = PartOneMovie.latest_archived_movie
-  
+
     if last_part_one.present?
       Log.logger.info "The last part one movie is #{last_part_one.video_id} published at #{last_part_one.publish_date.to_s}."
     else
@@ -166,7 +166,7 @@ module Crawler
       end
     end
 
-    Log.logger.info "Getting movies info in all of stored mylists is completed." 
+    Log.logger.info "Getting movies info in all of stored mylists is completed."
   rescue => exception
     Log.logger.error exception
   end
