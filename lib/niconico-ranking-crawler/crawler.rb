@@ -111,7 +111,7 @@ module Crawler
       end
       
       ActiveRecord::Base.transaction do
-        new_mylist.save unless Mylist.where(mylist_id: new_mylist.mylist_id).empty?
+        new_mylist.save if Mylist.where(mylist_id: new_mylist.mylist_id).empty?
 
         new_movies.each do |movie| 
           movie.save
