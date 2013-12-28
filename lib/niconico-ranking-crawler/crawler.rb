@@ -95,6 +95,8 @@ module Crawler
       i = 0
 
       ml.movies.each do |movie|
+        next if Movie.where(thread_id: movie.thread_id).present?
+
         new_movies[i] = Movie.new
         new_movies[i].video_id = movie.video_id
         new_movies[i].thread_id = movie.thread_id
@@ -109,7 +111,7 @@ module Crawler
       end
       
       ActiveRecord::Base.transaction do
-        new_mylist.save
+        new_mylist.save unless Mylist.where(mylist_id: new_mylist.mylist_id).empty?
 
         new_movies.each do |movie| 
           movie.save
@@ -117,7 +119,7 @@ module Crawler
           mm = MylistMovie.new
           mm.movie_id = movie.id
           mm.mylist_id = new_mylist.id
-          mm.save
+          mm.save unless MylistMovie.where(mylist_id: new_mylist.id).where(movie_id: movie.id).empty?
         end
       end
 
