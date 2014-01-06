@@ -1,5 +1,5 @@
 require "nicoquery"
-require "movie_logs"
+require "movie_log"
 require "active_record"
 
 
