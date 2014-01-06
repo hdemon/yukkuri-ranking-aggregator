@@ -140,28 +140,20 @@ module Crawler
 
       video_id_array = mylist_obj.movies.map(&:video_id)
       movies = NicoQuery.movie(video_id_array)
-
       movies.each do |movie|
         Log.logger.info "Start getting info of movie:#{movie.video_id}"
-        movie_log = MovieLogs.new
 
         if Movie.where(video_id: movie.video_id).empty?
           Log.logger.info "Skipped saving movie log of movie:#{movie.video_id} because of non-existent movie info in movie table."
           next
         end
 
-        movie_log.movie_id = Movie.where(video_id: movie.video_id).first.id
-        movie_log.view_counter = movie.view_counter
-        movie_log.mylist_counter = movie.mylist_counter
-        movie_log.comment_num = movie.comment_num
+        save_tags_of movie
+        save_logs_of movie
 
         counter = 1
-        movie.tags.each do |tag|
-          movie_log.send("tag_#{counter}=", tag[:text])
-          counter += 1
-        end
 
-        movie_log.save
+
         Log.logger.info "Completed getting info of movie:#{movie.video_id}"
       end
     end
@@ -169,6 +161,34 @@ module Crawler
     Log.logger.info "Getting movies info in all of stored mylists is completed."
   rescue => exception
     Log.logger.error exception
+  end
+
+  def self.save_tags_of movie
+    movie.tags.each do |tag|
+      if Tag.where(text: tag[:text]).empty?
+        new_tag = Tag.new
+        new_tag.text = tag[:text]
+        new_tag.save
+      else
+        next
+      end
+    end
+  end
+
+  def self.save_logs_of movie
+    movie_log = MovieLog.new
+    movie_log.movie_id = Movie.where(video_id: movie.video_id).first.id
+    movie_log.view_counter = movie.view_counter
+    movie_log.mylist_counter = movie.mylist_counter
+    movie_log.comment_num = movie.comment_num
+    movie_log.save
+
+    movie.tags.each do |tag|
+      movie_log_tag = MovieLogTag.new
+      movie_log_tag.tag_id = Tag.where(text: tag[:text]).first.id
+      movie_log_tag.movie_log_id = movie_log.id
+      movie_log_tag.save
+    end
   end
 
   module_function :get_latest_part1_movie_from_web

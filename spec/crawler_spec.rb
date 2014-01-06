@@ -1,6 +1,7 @@
 require 'spec_helper'
 require 'nicoquery'
 require 'fixtures/part_one_movies_from_20130901_to_20130905'
+require 'fixtures/series_mylist/video_array_for_mylist_1001'
 
 
 describe Crawler do
@@ -81,4 +82,44 @@ describe Crawler do
       end
     end
   end
+
+  describe ".get_mutable_movie_info_of_all_mylists" do
+    let!(:mylist) { FactoryGirl.create(:mylist, mylist_id: 1001) }
+    let!(:movie_1) { FactoryGirl.create(:movie, video_id: "sm1001") }
+    let!(:movie_2) { FactoryGirl.create(:movie, video_id: "sm1002") }
+    let!(:movie_3) { FactoryGirl.create(:movie, video_id: "sm1003") }
+
+    before do
+      WebMock.stub_request(:get, "http://www.nicovideo.jp/mylist/1001?numbers=1&rss=2.0")
+        .to_return(status: 200, body: Fixture.mylist_1001)
+
+      WebMock.stub_request(:get, "http://i.nicovideo.jp/v3/video.array?v=sm1003,sm1002,sm1001")
+        .to_return(:status => 200, :body => Fixture.video_array_for_mylist_1001, :headers => {})
+
+      Crawler.get_mutable_movie_info_of_all_mylists
+    end
+
+    it "saves new tags" do
+      expect(Tag.where(text: "ゲーム")).to be
+      expect(Tag.where(text: "ゆっくり実況プレイ")).to be
+      expect(Tag.where(text: "ゆっくり実況プレイpart1リンク")).to be
+    end
+
+    it "saves new movie logs" do
+      movie_logs = MovieLog.all
+
+      expect(movie_logs[0]).to be
+      expect(movie_logs[1]).to be
+      expect(movie_logs[2]).to be
+    end
+
+    it "saves new rows to the intermediate table between movie log and tag table" do
+      movie_log_tags = MovieLogTag.all
+
+      expect(movie_log_tags[0]).to be
+      expect(movie_log_tags[1]).to be
+      expect(movie_log_tags[2]).to be
+    end
+  end
+
 end
