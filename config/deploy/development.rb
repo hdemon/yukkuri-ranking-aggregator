@@ -6,8 +6,10 @@ set :ssh_options, {
   auth_methods: %w(publickey)
 }
 
-# It assumes that we deploy application to virtual machine controled by vagrant.
-server '127.0.0.1', user: 'yukkuri', port: 2222, roles: %w{web app}
+# It assumes that we deploy application to virtual machine controled by vagrant,
+# and set private ip for 192.168.33.11
+server '192.168.33.11', user: 'yukkuri', port: 22, roles: %w{web app}
+
 
 # you can set custom ssh options
 # it's possible to pass any option but you need to keep in mind that net/ssh understand limited list of options
