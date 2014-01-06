@@ -5,7 +5,7 @@ module Crawler
   PART_ONE_TAG = "ゆっくり実況プレイpart1リンク or VOICEROID実況プレイPart1リンク"
 
   # ニコ動にはあるが、DB上にはまだ無い最新の動画を取得
-  def get_latest_part1_movie_from_web
+  def self.get_latest_part1_movie_from_web
     Log.logger.info "Getting movies which has #{PART_ONE_TAG} tag is started."
 
     last_part_one = PartOneMovie.latest_archived_movie
@@ -45,7 +45,7 @@ module Crawler
 
   # それぞれの動画が持つマイリストから、シリーズをまとめたマイリストと認められるものを
   # 抽出し、series_mylist_idカラムに保存する。
-  def retrieve_series_mylists
+  def self.retrieve_series_mylists
     Log.logger.info "Retrieving series mylists is started."
     mylists = []
 
@@ -66,7 +66,7 @@ module Crawler
     Log.logger.error exception
   end
 
-  def series_mylist_ids_of(movies, &block)
+  def self.series_mylist_ids_of(movies, &block)
     movies.each do |part_one_movie|
       block.call({
         video_id: part_one_movie.video_id,
@@ -75,7 +75,7 @@ module Crawler
     end
   end
 
-  def get_series_mylists
+  def self.get_series_mylists
     Log.logger.info "Getting series mylists is started."
     movies = PartOneMovie.movies_having_retrieved_series_mylist
 
@@ -131,7 +131,7 @@ module Crawler
     Log.logger.error exception
   end
 
-  def get_mutable_movie_info_of_all_mylists
+  def self.get_mutable_movie_info_of_all_mylists
     Log.logger.info "Getting movies info in all of stored mylists is started."
 
     Mylist.all.each do |mylist|
@@ -190,11 +190,5 @@ module Crawler
       movie_log_tag.save
     end
   end
-
-  module_function :get_latest_part1_movie_from_web
-  module_function :retrieve_series_mylists
-  module_function :series_mylist_ids_of
-  module_function :get_series_mylists
-  module_function :get_mutable_movie_info_of_all_mylists
 end
 
