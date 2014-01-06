@@ -29,7 +29,7 @@ describe Crawler do
     end
   end
 
-  describe ".retrieve_series_mylist" do
+  describe ".retrieve_series_mylists" do
     context "when target mylist contains some movie" do
       let!(:movie) { FactoryGirl.create(:part_one_movie,  video_id: 'sm1001',
                                                           publish_date: Time.local(2013, 9, 1, 0, 0, 0),
@@ -62,7 +62,7 @@ describe Crawler do
         WebMock.stub_request(:get, "http://www.nicovideo.jp/mylist/2001?numbers=1&rss=2.0")
           .to_return(status: 200, body: Fixture.mylist_2001)
 
-        PartOneMovie.retrieve_series_mylist
+        Crawler.retrieve_series_mylists
       end
 
       subject { PartOneMovie.first }
