@@ -10,6 +10,6 @@ class AddPartOneMovies < ActiveRecord::Migration
       t.timestamps
     end
 
-    # add_index :part_one_movies, [:video_id], unique: true
+    add_index :part_one_movies, [:video_id], unique: true
   end
 end

@@ -116,10 +116,10 @@ module Crawler
         new_movies.each do |movie|
           movie.save
 
-          mm = MylistMovie.new
+          mm = MylistsMovies.new
           mm.movie_id = movie.id
           mm.mylist_id = new_mylist.id
-          mm.save if MylistMovie.where(mylist_id: new_mylist.id).where(movie_id: movie.id).empty?
+          mm.save if MylistsMovies.where(mylist_id: new_mylist.id).where(movie_id: movie.id).empty?
         end
       end
 
@@ -184,7 +184,7 @@ module Crawler
     movie_log.save
 
     movie.tags.each do |tag|
-      movie_log_tag = MovieLogTag.new
+      movie_log_tag = MovieLogsTags.new
       movie_log_tag.tag_id = Tag.where(text: tag[:text]).first.id
       movie_log_tag.movie_log_id = movie_log.id
       movie_log_tag.save

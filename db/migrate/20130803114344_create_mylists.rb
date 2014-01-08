@@ -8,5 +8,7 @@ class CreateMylists < ActiveRecord::Migration
 
       t.timestamps
     end
+
+    add_index :mylists, [:mylist_id], unique: true
   end
 end

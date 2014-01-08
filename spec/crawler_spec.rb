@@ -114,11 +114,11 @@ describe Crawler do
     end
 
     it "saves new rows to the intermediate table between movie log and tag table" do
-      movie_log_tags = MovieLogTag.all
+      movie_logs_tags = MovieLogsTags.all
 
-      expect(movie_log_tags[0]).to be
-      expect(movie_log_tags[1]).to be
-      expect(movie_log_tags[2]).to be
+      expect(movie_logs_tags[0]).to be
+      expect(movie_logs_tags[1]).to be
+      expect(movie_logs_tags[2]).to be
     end
   end
 
