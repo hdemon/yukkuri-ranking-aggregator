@@ -7,32 +7,35 @@ require 'logger'
 require 'niconico-ranking-crawler'
 
 spec = eval(File.read('niconico-ranking-crawler.gemspec'))
-config = YAML.load_file "./config/database.yml"
-ENV["ENV"] ||= 'development'
+ENV["NICO_CRAWLER_ENV"] ||= 'local'
+config = YAML.load_file("./config/database.yml")[ENV["NICO_CRAWLER_ENV"]]
 
 namespace :db do
-  task :migrate => :environment do
+  task :migrate => [:set_db_logger, :connect_db] do
+    ActiveRecord::Base.establish_connection config
     ActiveRecord::Migrator.migrate('db/migrate', ENV["VERSION"] ? ENV["VERSION"].to_i : nil )
+  end
+
+  task :create => :set_db_logger do
+    # DB作成前なので、establish_connectionにdatabaseというキーのあるハッシュを渡すとエラーになる。
+    ActiveRecord::Base.establish_connection config.dup.tap {|s| s.delete "database" }
+    ActiveRecord::Base.connection.create_database config["database"]
   end
 end
 
-task :environment do
-  ActiveRecord::Base.establish_connection(YAML::load(File.open('config/database.yml'))[ENV["ENV"]])
-  ActiveRecord::Base.logger = Logger.new(File.open('db/database.log', 'a'))
-end
+task :daily => [:connect_db] do
 
-task :create_database => :environment do
-  config = YAML::load(File.open('config/database.yml'))[ENV["ENV"]]
-  config.delete 'database'
-  ActiveRecord::Base.establish_connection config
-  dbname = YAML::load(File.open('config/database.yml'))[ENV["ENV"]]["database"]
-  ActiveRecord::Base.connection.create_database(dbname)
-end
-
-task :daily do
-  ActiveRecord::Base.establish_connection config[ENV["ENV"]]
   Crawler.get_latest_part1_movie_from_web
   Crawler.retrieve_series_mylists
   Crawler.get_series_mylists
   Crawler.get_mutable_movie_info_of_all_mylists
+end
+
+
+task :connect_db do
+  ActiveRecord::Base.establish_connection config
+end
+
+task :set_db_logger do
+  ActiveRecord::Base.logger = Logger.new(File.open('db/database.log', 'a'))
 end
