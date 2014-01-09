@@ -23,14 +23,14 @@ namespace :db do
   end
 end
 
-task :daily => [:connect_db] do
-
-  Crawler.get_latest_part1_movie_from_web
-  Crawler.retrieve_series_mylists
-  Crawler.get_series_mylists
-  Crawler.get_mutable_movie_info_of_all_mylists
+namespace :crawl do
+  task :daily => :connect_db do
+    Crawler.get_latest_part1_movie_from_web
+    Crawler.retrieve_series_mylists
+    Crawler.get_series_mylists
+    Crawler.get_mutable_movie_info_of_all_mylists
+  end
 end
-
 
 task :connect_db do
   ActiveRecord::Base.establish_connection config
