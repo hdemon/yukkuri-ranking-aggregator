@@ -34,7 +34,7 @@ namespace :deploy do
       execute "echo #{release_path}"
       within release_path do
         execute "mkdir /home/yukkuri/log -p"
-        execute "cd /home/yukkuri/yukkuri-crawler/current && ( PATH=~/rbenv/shims:~/rbenv/bin:$PATH bundle exec rake db:migrate ENV=production )"
+        execute "cd /home/yukkuri/yukkuri-crawler/current && ( PATH=~/rbenv/shims:~/rbenv/bin:$PATH bundle exec rake db:migrate NICO_CRAWLER_ENV=production )"
         # execute :rake, "db:migrate"
       end
     end
