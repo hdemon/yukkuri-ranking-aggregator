@@ -6,5 +6,7 @@ class CreateMovieLogs < ActiveRecord::Migration
       t.integer :mylist_counter, :null => false
       t.integer :comment_num, :null => false
     end
+
+    add_index :movie_logs, [:movie_id]
   end
 end
