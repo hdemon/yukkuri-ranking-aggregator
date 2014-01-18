@@ -136,10 +136,11 @@ module Crawler
 
     Mylist.all.each do |mylist|
       Log.logger.info "target is mylist:#{mylist.mylist_id}"
-      mylist_obj = NicoQuery.mylist mylist.mylist_id
+      mylist_obj = get_mylist_obj mylist.mylist_id
 
       video_id_array = mylist_obj.movies.map(&:video_id)
-      movies = NicoQuery.movie(video_id_array)
+      movies = get_movie_obj video_id_array
+
       movies.each do |movie|
         Log.logger.info "Start getting info of movie:#{movie.video_id}"
 
@@ -153,7 +154,6 @@ module Crawler
 
         counter = 1
 
-
         Log.logger.info "Completed getting info of movie:#{movie.video_id}"
       end
     end
@@ -161,6 +161,24 @@ module Crawler
     Log.logger.info "Getting movies info in all of stored mylists is completed."
   rescue => exception
     Log.logger.error exception
+  end
+
+  def self.get_mylist_obj mylist_id
+    NicoQuery.mylist mylist_id
+  rescue => exception
+    Log.logger.error exception
+    counter += 1
+    Log.logger.info "Retry getting mylist info"
+    retry until counter < 6
+  end
+
+  def self.get_movie_obj video_id_array
+    NicoQuery.movie video_id_array
+  rescue => exception
+    Log.logger.error exception
+    counter += 1
+    Log.logger.info "Retry getting movie info"
+    retry until counter < 6
   end
 
   def self.save_tags_of movie

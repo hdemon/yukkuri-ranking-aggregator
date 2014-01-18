@@ -89,37 +89,51 @@ describe Crawler do
     let!(:movie_2) { FactoryGirl.create(:movie, video_id: "sm1002") }
     let!(:movie_3) { FactoryGirl.create(:movie, video_id: "sm1003") }
 
-    before do
-      WebMock.stub_request(:get, "http://www.nicovideo.jp/mylist/1001?numbers=1&rss=2.0")
-        .to_return(status: 200, body: Fixture.mylist_1001)
+    context "when apis return standard 200 response" do
+      before do
+        WebMock.stub_request(:get, "http://www.nicovideo.jp/mylist/1001?numbers=1&rss=2.0")
+          .to_return(status: 200, body: Fixture.mylist_1001)
 
-      WebMock.stub_request(:get, "http://i.nicovideo.jp/v3/video.array?v=sm1003,sm1002,sm1001")
-        .to_return(:status => 200, :body => Fixture.video_array_for_mylist_1001, :headers => {})
+        WebMock.stub_request(:get, "http://i.nicovideo.jp/v3/video.array?v=sm1003,sm1002,sm1001")
+          .to_return(:status => 200, :body => Fixture.video_array_for_mylist_1001, :headers => {})
 
-      Crawler.get_mutable_movie_info_of_all_mylists
+        Crawler.get_mutable_movie_info_of_all_mylists
+      end
+
+      it "saves new tags" do
+        expect(Tag.where(text: "ゲーム")).to be
+        expect(Tag.where(text: "ゆっくり実況プレイ")).to be
+        expect(Tag.where(text: "ゆっくり実況プレイpart1リンク")).to be
+      end
+
+      it "saves new movie logs" do
+        movie_logs = MovieLog.all
+
+        expect(movie_logs[0]).to be
+        expect(movie_logs[1]).to be
+        expect(movie_logs[2]).to be
+      end
+
+      it "saves new rows to the intermediate table between movie log and tag table" do
+        movie_logs_tags = MovieLogsTags.all
+
+        expect(movie_logs_tags[0]).to be
+        expect(movie_logs_tags[1]).to be
+        expect(movie_logs_tags[2]).to be
+      end
     end
 
-    it "saves new tags" do
-      expect(Tag.where(text: "ゲーム")).to be
-      expect(Tag.where(text: "ゆっくり実況プレイ")).to be
-      expect(Tag.where(text: "ゆっくり実況プレイpart1リンク")).to be
-    end
+    # context "when apis return extraordinary response" do
+    #   before do
+    #     WebMock.stub_request(:get, "http://www.nicovideo.jp/mylist/1001?numbers=1&rss=2.0")
+    #       .to_return(status: 200, body: Fixture.mylist_1001)
 
-    it "saves new movie logs" do
-      movie_logs = MovieLog.all
+    #     WebMock.stub_request(:get, "http://i.nicovideo.jp/v3/video.array?v=sm1003,sm1002,sm1001")
+    #       .to_return(:status => 403, :body => Fixture.video_array_for_mylist_1001, :headers => {})
 
-      expect(movie_logs[0]).to be
-      expect(movie_logs[1]).to be
-      expect(movie_logs[2]).to be
-    end
-
-    it "saves new rows to the intermediate table between movie log and tag table" do
-      movie_logs_tags = MovieLogsTags.all
-
-      expect(movie_logs_tags[0]).to be
-      expect(movie_logs_tags[1]).to be
-      expect(movie_logs_tags[2]).to be
-    end
+    #     Crawler.get_mutable_movie_info_of_all_mylists
+    #   end
+    # end
   end
 
 end
