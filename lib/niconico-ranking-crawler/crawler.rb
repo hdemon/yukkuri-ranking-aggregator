@@ -69,7 +69,7 @@ module Crawler
     movies.each do |part_one_movie|
       block.call({
         video_id: part_one_movie.video_id,
-        series_mylist_id: part_one_movie.series_mylist_id
+        series_mylist_id: part_one_movie.retrieved_series_mylist_id
       })
     end
   end

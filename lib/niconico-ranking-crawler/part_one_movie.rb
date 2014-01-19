@@ -10,11 +10,11 @@ class PartOneMovie < ActiveRecord::Base
   }
 
   scope :movies_not_having_retrieved_series_mylist, -> {
-    PartOneMovie.where(series_mylist: nil).order("publish_date DESC")
+    PartOneMovie.where(series_mylist_id: nil).order("publish_date DESC")
   }
 
   scope :movies_having_retrieved_series_mylist, -> {
-    PartOneMovie.where("series_mylist IS NOT NULL")
+    PartOneMovie.where("series_mylist_id IS NOT NULL")
   }
 
   class DummyOfEarliest < NicoQuery::Object::Movie
@@ -31,7 +31,7 @@ class PartOneMovie < ActiveRecord::Base
   # and return its id.
   #
   # @return [Integer] mylist_id
-  def series_mylist_id
+  def retrieved_series_mylist_id
     Log.logger.info "start retrieving series mylist from movie:#{self.video_id}"
     movie = NicoQuery::movie self.video_id
     return unless movie.available?

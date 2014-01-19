@@ -68,7 +68,7 @@ describe Crawler do
       subject { PartOneMovie.first }
 
       it "should retrieve series mylist" do
-        expect(subject.series_mylist_id).to eq 1001
+        expect(subject.retrieved_series_mylist_id).to eq 1001
       end
     end
 
