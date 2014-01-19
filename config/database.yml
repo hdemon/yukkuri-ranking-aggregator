@@ -1,7 +1,7 @@
 local:
   adapter: mysql2
   encoding: utf8
-  database: yukkuri_dev
+  database: yukkuri
   pool: 5
   username: root
   password:

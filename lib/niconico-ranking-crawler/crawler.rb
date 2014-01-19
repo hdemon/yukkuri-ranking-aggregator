@@ -54,11 +54,10 @@ module Crawler
 
     series_mylist_ids_of(movies) do |part_one_movie|
       m = PartOneMovie.where(video_id: part_one_movie[:video_id]).first
-      # TODO: カラム名をseries_mylist_idにする
-      m.series_mylist = part_one_movie[:series_mylist_id]
+      m.series_mylist_id = part_one_movie[:series_mylist_id]
       m.has_retrieved_series_mylist = true
       m.save
-      Log.logger.info "Saving movie:#{m.series_mylist} as series mylist of #{part_one_movie[:video_id]} is completed successfully."
+      Log.logger.info "Saving movie:#{m.series_mylist_id} as series mylist of #{part_one_movie[:video_id]} is completed successfully."
     end
 
     Log.logger.info "Retrieving series mylists is completed."
@@ -80,9 +79,9 @@ module Crawler
     movies = PartOneMovie.movies_having_retrieved_series_mylist
 
     movies.each do |movie|
-      next if Mylist.where(mylist_id: movie.series_mylist).present?
+      next if Mylist.where(mylist_id: movie.series_mylist_id).present?
 
-      ml = NicoQuery.mylist movie.series_mylist
+      ml = NicoQuery.mylist movie.series_mylist_id
 
       new_mylist = Mylist.new
       new_mylist.mylist_id = ml.mylist_id
@@ -194,17 +193,20 @@ module Crawler
   end
 
   def self.save_logs_of movie
+    now = Time.now 
     movie_log = MovieLog.new
     movie_log.movie_id = Movie.where(video_id: movie.video_id).first.id
     movie_log.view_counter = movie.view_counter
     movie_log.mylist_counter = movie.mylist_counter
     movie_log.comment_num = movie.comment_num
+    movie_log.created_at = now
     movie_log.save
 
     movie.tags.each do |tag|
       movie_log_tag = MovieLogsTags.new
       movie_log_tag.tag_id = Tag.where(text: tag[:text]).first.id
       movie_log_tag.movie_log_id = movie_log.id
+      movie_log_tag.created_at = now
       movie_log_tag.save
     end
   end
