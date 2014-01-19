@@ -42,23 +42,25 @@ class PartOneMovie < ActiveRecord::Base
       return
     end
 
-    medians_of_levenshtein = mylists.map do |mylist|
-      # 動画を含まないマイリストへの対応
-      if mylist.movies.blank?
-        median = 0
-      else
-        median = median_of_levenshtein_distances(from: mylist.movies, to: movie)
-      end
-
-      { mylist_id: mylist.mylist_id, median: median }
-    end
-
-    min = medians_of_levenshtein.min { |a, b| a[:median] <=> b[:median] }
+    min = medians_of_levenshtein_of(mylists, movie).min { |a, b| a[:median] <=> b[:median] }
     Log.logger.info "#{movie.video_id}: #{min[:mylist_id]} is series mylist."
     min[:mylist_id]
   end
 
   private
+
+  def medians_of_levenshtein_of mylists, target_movie
+    mylists.map do |mylist|
+      # 動画を含まないマイリストへの対応
+      if mylist.movies.blank?
+        median = 0
+      else
+        median = median_of_levenshtein_distances(from: mylist.movies, to: target_movie)
+      end
+
+      { mylist_id: mylist.mylist_id, median: median }
+    end
+  end
 
   def median_of_levenshtein_distances(from: nil, to: nil)
     Utils.median(Utils.levenshtein_distances(base_movies: from, target_movie: to))
@@ -71,7 +73,7 @@ class PartOneMovie < ActiveRecord::Base
       mylist.movies.map do |movie|
         unless movie.tags.blank?
           movie.tags.map { |tag| tag[:text] == "ゆっくり実況プレイpart1リンク" }
-        else 
+        else
           [false]
         end.include? true
       end.include? true
