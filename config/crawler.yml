@@ -9,7 +9,7 @@ log_file_path:
 default: &default
   part_one_tag: "ゆっくり実況プレイpart1リンク or VOICEROID実況プレイPart1リンク"
 
-local:
+local: &local
   <<: *default
   host: 127.0.0.1
   log_file_path: ./tmp/crawler.log
@@ -17,7 +17,7 @@ local:
 test:
   <<: *local
 
-development:
+development: &development
   <<: *default
   host: 192.168.33.12
   log_file_path: /home/yukkuri/log/crawler.log
