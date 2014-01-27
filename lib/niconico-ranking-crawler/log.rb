@@ -3,7 +3,7 @@ require 'logger'
 # see http://twei55.github.io/blog/2012/01/26/ruby-singleton-logger/
 class Log
   CONFIG = {
-    log_file_path: ENV["NC_LOG_PATH"]
+    log_file_path: ENV["NC_LOG_PATH"] || "./tmp/crawler.log"
   }
 
   include Singleton

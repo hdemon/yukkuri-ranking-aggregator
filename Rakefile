@@ -8,26 +8,37 @@ require 'niconico-ranking-crawler'
 
 spec = eval(File.read('niconico-ranking-crawler.gemspec'))
 ENV["NICO_CRAWLER_ENV"] ||= 'local'
+
+
 config = {
-  db: YAML.load_file("./config/database.yml")[ENV["NICO_CRAWLER_ENV"]],
-  crawler: YAML.load_file("./config/crawler.yml")[ENV["NICO_CRAWLER_ENV"]]
+  adapter: "mysql2",
+  encoding: "utf8",
+  database: ENV["NC_DB_USERNAME"] || "yukkuri",
+  pool: 5,
+  username: ENV["NC_DB_USERNAME"] || "root",
+  password: ENV["NC_DB_PASS"] || "",
+  socket: ENV["NC_DB_SOCKET_PATH"] || "/tmp/mysql.sock"
 }
+
+ENV["NC_LOG_PATH"] = "./tmp/crawler.log"
+ENV["NC_PART_ONE_TAG"] = "ゆっくり実況プレイpart1リンク or VOICEROID実況プレイPart1リンク"
 
 
 namespace :db do
   task :migrate => [:set_db_logger, :connect_db] do
-    ActiveRecord::Base.establish_connection config[:db]
+    ActiveRecord::Base.establish_connection config
     ActiveRecord::Migrator.migrate('db/migrate', ENV["VERSION"] ? ENV["VERSION"].to_i : nil )
   end
 
   task :create => :set_db_logger do
     # DB作成前なので、establish_connectionにdatabaseというキーのあるハッシュを渡すとエラーになる。
-    ActiveRecord::Base.establish_connection config[:db].dup.tap {|s| s.delete "database" }
-    ActiveRecord::Base.connection.create_database config[:db]["database"]
+    ActiveRecord::Base.establish_connection config.dup.tap {|s| s.delete "database" }
+    ActiveRecord::Base.connection.create_database config["database"]
   end
 end
 
 namespace :crawl do
+  desc "Run daily crawl task"
   task :daily => :connect_db do
     Crawler.get_latest_part1_movie_from_web
     Crawler.retrieve_series_mylists
@@ -46,7 +57,7 @@ namespace :aggregate do
 end
 
 task :connect_db do
-  ActiveRecord::Base.establish_connection config[:db]
+  ActiveRecord::Base.establish_connection config
 end
 
 task :set_db_logger do
