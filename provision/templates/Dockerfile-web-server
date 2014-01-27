@@ -1,0 +1,20 @@
+FROM %(parent_image_id)s
+
+MAINTAINER Masami Yonehara
+
+RUN echo "deb http://archive.ubuntu.com/ubuntu precise main universe" > /etc/apt/sources.list
+RUN apt-get update -y
+
+RUN apt-get install -y \
+  mysql-client \
+  nginx
+
+RUN echo "daemon off;" >> /etc/nginx/nginx.conf
+RUN mkdir -p /etc/nginx/ssl
+ADD default /etc/nginx/sites-available/default
+ADD default-ssl /etc/nginx/sites-available/default-ssl
+
+EXPOSE 80
+EXPOSE 443
+
+CMD ["nginx"]

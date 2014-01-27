@@ -1,0 +1,44 @@
+FROM ubuntu
+
+MAINTAINER Masami Yonehara
+
+RUN apt-get update -y
+RUN apt-get upgrade -y
+
+RUN apt-get install -y \
+  sudo \
+  man-db \
+  wget \
+  git \
+  nano \
+  curl \
+  net-tools \
+  patch \
+  gcc \
+  openssl \
+  make \
+  bzip2 \
+  autoconf \
+  automake \
+  libtool \
+  bison \
+  build-essential \
+
+  libreadline6 \
+  libreadline-dev \
+  zlib1g \
+  zlib1g-dev \
+  libyaml-dev \
+  libxml2-dev \
+  libxslt1.1 \
+  libxslt1-dev
+
+# install ruby
+RUN cd /tmp;\
+  wget http://cache.ruby-lang.org/pub/ruby/2.1/ruby-2.1.0.tar.gz;\
+  tar xvzf ./ruby-2.1.0.tar.gz;\
+  cd ruby-2.1.0;\
+  ./configure --disable-install-rdoc;\
+  make;\
+  make install;\
+  rm -rf ruby-2.1.0;\

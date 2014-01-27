@@ -1,0 +1,10 @@
+FROM %(parent_image_id)s
+
+MAINTAINER Masami Yonehara
+
+RUN git clone https://github.com/hdemon/yukkuri-ranking-server.git
+
+EXPOSE 80
+EXPOSE 443
+
+CMD ["nginx"]
