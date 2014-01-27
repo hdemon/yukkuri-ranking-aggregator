@@ -53,6 +53,13 @@ namespace :aggregate do
   end
 end
 
+namespace :deploy do
+  task :web_app do
+    config = YAML.load_file("./config/deploy.yml")[ENV["target"]]
+    sh "fab deploy -H #{config["host"]} -i #{config["ssh_private_key"]} -u #{config["username"]} --fabfile ./provision/fabfile/"
+  end
+end
+
 task :connect_db do
   ActiveRecord::Base.establish_connection config
 end

@@ -21,7 +21,7 @@ def deploy():
 
 
 def build_basement_image():
-  source_file = './templates/Dockerfile-basement'
+  source_file = './provision/templates/Dockerfile-basement'
   destination_file = './tmp/Dockerfile'
 
   run("mkdir -p ./tmp")
@@ -37,21 +37,21 @@ def build_mysql_image():
   config = yaml.load(open('../config/crawler.yml').read().decode('utf-8'))
 
   context = { "parent_image_id": Image.image_id_of("basement")[0], "root_password": config["root_password"] }
-  source_file = './templates/Dockerfile-mysql'
+  source_file = './provision/templates/Dockerfile-mysql'
   destination_file = './tmp/Dockerfile'
 
-  # run("mkdir -p ./tmp")
-  # files.upload_template(source_file, destination_file, mode=0777)
+  run("mkdir -p ./tmp")
+  files.upload_template(source_file, destination_file, mode=0777)
 
-  # image = Image("mysql", destination_file)
-  # image.build()
-  # run("rm -rf ./tmp")
-  # return image
+  image = Image("mysql", destination_file)
+  image.build()
+  run("rm -rf ./tmp")
+  return image
 
 
 def build_web_basement_image():
   context = { "parent_image_id": Image.image_id_of("basement")[0] }
-  source_file = './templates/Dockerfile-web-server'
+  source_file = './provision/templates/Dockerfile-web-server'
   destination_file = './tmp/Dockerfile'
 
   run("mkdir -p ./tmp")

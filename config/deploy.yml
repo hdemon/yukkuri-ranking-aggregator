@@ -1,0 +1,19 @@
+# You need ...
+#
+# 1. fill the below values with ip adress or hostname.
+# 2. set the ssh configuration by .ssh/config.
+
+development:
+  host: 192.168.33.12
+  username: vagrant
+  ssh_private_key: ~/.vagrant.d/insecure_private_key
+
+staging:
+  host: FILL IP ADRESS OR HOSTNAME
+  username: FILL USERNAME
+  ssh_private_key: FILL SSH PRIVATE KEY PATH
+
+production:
+  host: FILL IP ADRESS OR HOSTNAME
+  username: FILL USERNAME
+  ssh_private_key: FILL SSH PRIVATE KEY PATH
