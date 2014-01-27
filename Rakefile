@@ -9,7 +9,7 @@ require 'niconico-ranking-crawler'
 spec = eval(File.read('niconico-ranking-crawler.gemspec'))
 ENV["NICO_CRAWLER_ENV"] ||= 'local'
 config = {
-  db: YAML.load_file("./config/database.yml")[ENV["NICO_CRAWLER_ENV"]]
+  db: YAML.load_file("./config/database.yml")[ENV["NICO_CRAWLER_ENV"]],
   crawler: YAML.load_file("./config/crawler.yml")[ENV["NICO_CRAWLER_ENV"]]
 }
 

@@ -2,25 +2,25 @@ require "nicoquery"
 
 
 module Crawler
-  PART_ONE_TAG = "ゆっくり実況プレイpart1リンク or VOICEROID実況プレイPart1リンク"
+  CONFIG = {
+    part_one_tag: ENV["NC_PART_ONE_TAG"]
+  }
 
   # ニコ動にはあるが、DB上にはまだ無い最新の動画を取得
   def self.get_latest_part1_movie_from_web
-    Log.logger.info "Getting movies which has #{PART_ONE_TAG} tag is started."
+    Log.logger.info "Getting movies which has #{CONFIG[:part_one_tag]} tag is started."
 
     last_part_one = PartOneMovie.latest_archived_movie
-
     if last_part_one.present?
       Log.logger.info "The last part one movie is #{last_part_one.video_id} published at #{last_part_one.publish_date.to_s}."
     else
       Log.logger.info "There is no part one movie in DB."
     end
 
-    NicoQuery.tag_search( tag: PART_ONE_TAG,
+    NicoQuery.tag_search( tag: CONFIG[:part_one_tag],
                           sort: :published_at,
                           order: :desc
                         ) do |result|
-
       if result.publish_date <= (last_part_one.try(:publish_date) || PartOneMovie::DummyOfEarliest.publish_date)
         Log.logger.info "Tag searching is terminated."
         return :break
@@ -38,7 +38,7 @@ module Crawler
       :continue
     end
 
-    Log.logger.info "Getting movies which has #{PART_ONE_TAG} tag is completed."
+    Log.logger.info "Getting movies which has #{CONFIG[:part_one_tag]} tag is completed."
   rescue => exception
     Log.logger.error exception
   end
@@ -212,4 +212,3 @@ module Crawler
     end
   end
 end
-
