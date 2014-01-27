@@ -6,9 +6,6 @@ require 'yaml'
 require 'logger'
 require 'niconico-ranking-crawler'
 
-spec = eval(File.read('niconico-ranking-crawler.gemspec'))
-ENV["NICO_CRAWLER_ENV"] ||= 'local'
-
 
 config = {
   adapter: "mysql2",

@@ -1,7 +1,7 @@
-# You need ...
+# You need to ...
 #
 # 1. fill the below values with ip adress or hostname.
-# 2. set the ssh configuration by .ssh/config.
+# 2. rename this file to 'config.yml'
 
 development:
   host: 192.168.33.12
@@ -14,6 +14,6 @@ staging:
   ssh_private_key: FILL SSH PRIVATE KEY PATH
 
 production:
-  host: FILL IP ADRESS OR HOSTNAME
-  username: FILL USERNAME
-  ssh_private_key: FILL SSH PRIVATE KEY PATH
+  host: 153.121.41.85
+  username: hdemon
+  ssh_private_key: ~/.ssh/id_rsa.yukkuri

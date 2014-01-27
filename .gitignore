@@ -1,6 +1,6 @@
 log/
 tmp/
-config/config.yml
+config/deploy.yml
 config/deploy.rb
 db/database.log
 log/*
