@@ -44,15 +44,12 @@ namespace :crawl do
     Crawler.retrieve_series_mylists
     Crawler.get_series_mylists
     Crawler.get_mutable_movie_info_of_all_mylists
-<<<<<<< HEAD
-=======
   end
 end
 
 namespace :aggregate do
   task :daily_rankings => :connect_db do
     Aggregator.refresh_daily_rankings
->>>>>>> fix
   end
 end
 
