@@ -168,6 +168,7 @@ module Crawler
   rescue => exception
     Log.logger.error exception
     counter += 1
+    sleep 180
     Log.logger.info "Retry getting mylist info"
     retry until counter < 6
   end
@@ -177,6 +178,7 @@ module Crawler
   rescue => exception
     Log.logger.error exception
     counter += 1
+    sleep 180
     Log.logger.info "Retry getting movie info"
     retry until counter < 6
   end
