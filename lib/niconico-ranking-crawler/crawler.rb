@@ -2,13 +2,11 @@ require "nicoquery"
 
 
 module Crawler
-  CONFIG = {
-    part_one_tag: ENV["NC_PART_ONE_TAG"]
-  }
+  CONFIG = YAML.load_file("./config/config.yml")
 
   # ニコ動にはあるが、DB上にはまだ無い最新の動画を取得
   def self.get_latest_part1_movie_from_web
-    Log.logger.info "Getting movies which has #{CONFIG[:part_one_tag]} tag is started."
+    Log.logger.info "Getting movies which has #{CONFIG["part_one_tag"]} tag is started."
 
     last_part_one = PartOneMovie.latest_archived_movie
     if last_part_one.present?
@@ -17,7 +15,7 @@ module Crawler
       Log.logger.info "There is no part one movie in DB."
     end
 
-    NicoQuery.tag_search( tag: CONFIG[:part_one_tag],
+    NicoQuery.tag_search( tag: CONFIG["part_one_tag"],
                           sort: :published_at,
                           order: :desc
                         ) do |result|
@@ -38,7 +36,7 @@ module Crawler
       :continue
     end
 
-    Log.logger.info "Getting movies which has #{CONFIG[:part_one_tag]} tag is completed."
+    Log.logger.info "Getting movies which has #{CONFIG["part_one_tag"]} tag is completed."
   rescue => exception
     Log.logger.error exception
   end

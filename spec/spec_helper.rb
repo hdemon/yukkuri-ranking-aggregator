@@ -22,21 +22,10 @@ require 'pry'
 require 'configatron'
 require 'yaml'
 
-config = {
-  adapter: "mysql2",
-  encoding: "utf8",
-  database: "yukkuri_test",
-  pool: 5,
-  username: "root",
-  password: "",
-  socket: "/tmp/mysql.sock"
-}
-
-ENV["NC_LOG_PATH"] = "./tmp/crawler.log"
-ENV["NC_PART_ONE_TAG"] = "ゆっくり実況プレイpart1リンク or VOICEROID実況プレイPart1リンク"
+CONFIG = YAML.load_file("./config/config.yml")
 
 
-ActiveRecord::Base.establish_connection config
+ActiveRecord::Base.establish_connection CONFIG
 $test_env = true
 
 FactoryGirl.find_definitions

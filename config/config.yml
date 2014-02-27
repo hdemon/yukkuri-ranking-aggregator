@@ -7,3 +7,4 @@ username: root
 password:
 socket: /tmp/mysql.sock
 log_file_path: /tmp/crawler.log
+part_one_tag: "ゆっくり実況プレイpart1リンク or VOICEROID実況プレイPart1リンク"
