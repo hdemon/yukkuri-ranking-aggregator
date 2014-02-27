@@ -25,7 +25,7 @@ require 'yaml'
 CONFIG = YAML.load_file("./config/config.yml")
 
 
-ActiveRecord::Base.establish_connection CONFIG
+ActiveRecord::Base.establish_connection CONFIG["database"]
 $test_env = true
 
 FactoryGirl.find_definitions

@@ -5,15 +5,12 @@ require 'active_record'
 require 'yaml'
 require 'logger'
 require 'niconico-ranking-crawler'
-
-
-ENV["NC_PART_ONE_TAG"] = "ゆっくり実況プレイpart1リンク or VOICEROID実況プレイPart1リンク"
 config = YAML.load_file("./config/config.yml")
 
 
 namespace :db do
   task :migrate => [:set_db_logger, :connect_db] do
-    ActiveRecord::Base.establish_connection config
+    ActiveRecord::Base.establish_connection config["database"]
     ActiveRecord::Migrator.migrate('db/migrate', ENV["VERSION"] ? ENV["VERSION"].to_i : nil )
   end
 
