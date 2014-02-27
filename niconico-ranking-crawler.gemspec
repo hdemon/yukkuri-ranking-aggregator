@@ -30,16 +30,11 @@ lib/niconico-ranking-crawler.rb
   s.add_development_dependency 'ffaker'
   s.add_development_dependency 'whenever'
   s.add_development_dependency 'pry'
- 
-  s.add_runtime_dependency 'gli','2.8.1'
+
   s.add_runtime_dependency 'nicoquery'
   s.add_runtime_dependency 'mysql2'
   s.add_runtime_dependency 'activerecord', '~>4.0.0'
   s.add_runtime_dependency 'configatron', '3.0.0.rc1'
-  s.add_runtime_dependency 'capistrano'
-  s.add_runtime_dependency 'capistrano-rbenv'
-  s.add_runtime_dependency 'capistrano-bundler'
-  s.add_runtime_dependency 'capistrano-console'
   s.add_runtime_dependency 'whenever'
   s.add_runtime_dependency 'pry'
 end
