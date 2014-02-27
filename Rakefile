@@ -7,20 +7,8 @@ require 'logger'
 require 'niconico-ranking-crawler'
 
 
-config = {
-  adapter: "mysql2",
-  encoding: "utf8",
-  host: ENV["NC_DB_HOST"] || "127.0.0.1",
-  database: ENV["NC_DB_NAME"] || "yukkuri",
-  pool: 5,
-  username: ENV["NC_DB_USERNAME"] || "root",
-  password: ENV["NC_DB_PASSWORD"] || "",
-  socket: ENV["NC_DB_SOCKET_PATH"] || "/tmp/mysql.sock"
-}
-
-ENV["NC_LOG_PATH"] = "./tmp/crawler.log"
 ENV["NC_PART_ONE_TAG"] = "ゆっくり実況プレイpart1リンク or VOICEROID実況プレイPart1リンク"
-config = YAML.load_file("./config/deploy.yml")[ENV["target"]]
+config = YAML.load_file("./config/config.yml")
 
 
 namespace :db do
