@@ -40,19 +40,6 @@ namespace :aggregate do
   end
 end
 
-task :build_basement do
-  sh "fab build_basement -H #{config["host"]} -i #{config["ssh_private_key"]} -u #{config["username"]} --fabfile ./provision/fabfile/"
-end
-
-task :deploy do
-  sh "fab deploy -H #{config["host"]} -i #{config["ssh_private_key"]} -u #{config["username"]} --fabfile ./provision/fabfile/"
-end
-
-task :install_docker do
-  config = YAML.load_file("./config/deploy.yml")[ENV["target"]]
-  sh "fab install_docker -H #{config["host"]} -i #{config["ssh_private_key"]} -u #{config["username"]} --fabfile ./provision/fabfile/"
-end
-
 task :connect_db do
   ActiveRecord::Base.establish_connection config
 end
