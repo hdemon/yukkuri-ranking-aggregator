@@ -10,15 +10,17 @@ require 'niconico-ranking-crawler'
 config = {
   adapter: "mysql2",
   encoding: "utf8",
-  database: ENV["NC_DB_USERNAME"] || "yukkuri",
+  host: ENV["NC_DB_HOST"] || "127.0.0.1",
+  database: ENV["NC_DB_NAME"] || "yukkuri",
   pool: 5,
   username: ENV["NC_DB_USERNAME"] || "root",
-  password: ENV["NC_DB_PASS"] || "",
+  password: ENV["NC_DB_PASSWORD"] || "",
   socket: ENV["NC_DB_SOCKET_PATH"] || "/tmp/mysql.sock"
 }
 
 ENV["NC_LOG_PATH"] = "./tmp/crawler.log"
 ENV["NC_PART_ONE_TAG"] = "ゆっくり実況プレイpart1リンク or VOICEROID実況プレイPart1リンク"
+config = YAML.load_file("./config/deploy.yml")[ENV["target"]]
 
 
 namespace :db do
@@ -50,11 +52,17 @@ namespace :aggregate do
   end
 end
 
-namespace :deploy do
-  task :web_app do
-    config = YAML.load_file("./config/deploy.yml")[ENV["target"]]
-    sh "fab deploy -H #{config["host"]} -i #{config["ssh_private_key"]} -u #{config["username"]} --fabfile ./provision/fabfile/"
-  end
+task :build_basement do
+  sh "fab build_basement -H #{config["host"]} -i #{config["ssh_private_key"]} -u #{config["username"]} --fabfile ./provision/fabfile/"
+end
+
+task :deploy do
+  sh "fab deploy -H #{config["host"]} -i #{config["ssh_private_key"]} -u #{config["username"]} --fabfile ./provision/fabfile/"
+end
+
+task :install_docker do
+  config = YAML.load_file("./config/deploy.yml")[ENV["target"]]
+  sh "fab install_docker -H #{config["host"]} -i #{config["ssh_private_key"]} -u #{config["username"]} --fabfile ./provision/fabfile/"
 end
 
 task :connect_db do

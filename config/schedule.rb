@@ -3,7 +3,7 @@
 # It's helpful, but not entirely necessary to understand cron before proceeding.
 # http://en.wikipedia.org/wiki/Cron
 
-# set :output, "/var/log/cron_log.log"
+set :output, "/var/log/cron_log.log"
 
 # utc
 every 1.day, :at => '5:10 pm' do

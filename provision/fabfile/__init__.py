@@ -95,7 +95,6 @@ def remove_images(repository_name, tag = None):
 def remove_all_containers():
   sudo('docker rm $(sudo docker ps -a -q)')
 
-
 def remove_all_containers_of(repository_name, tag):
   try:
     sudo('docker rm $(sudo docker ps -a | grep %s | awk \'{ print $1 }\')' % repository_name)
