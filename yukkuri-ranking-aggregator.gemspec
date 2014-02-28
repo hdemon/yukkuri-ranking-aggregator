@@ -22,13 +22,11 @@ lib/yukkuri-ranking-aggregator.rb
   s.executables << 'yukkuri-ranking-aggregator'
   s.add_development_dependency 'rake'
   s.add_development_dependency 'rdoc'
-  s.add_development_dependency 'aruba'
   s.add_development_dependency 'rspec'
   s.add_development_dependency 'webmock'
   s.add_development_dependency 'database_cleaner'
   s.add_development_dependency 'factory_girl'
   s.add_development_dependency 'ffaker'
-  s.add_development_dependency 'whenever'
   s.add_development_dependency 'pry'
 
   s.add_runtime_dependency 'nicoquery'
