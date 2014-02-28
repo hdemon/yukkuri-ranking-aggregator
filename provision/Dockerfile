@@ -9,4 +9,4 @@ RUN useradd -m app
 ADD ./startup.sh /home/app/startup.sh
 RUN chmod +x /home/app/startup.sh
 
-CMD ["startup.sh"]
+CMD ["/home/app/startup.sh"]
