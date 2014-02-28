@@ -15,9 +15,9 @@ lib/yukkuri-ranking-aggregator/version.rb
 lib/yukkuri-ranking-aggregator.rb
   )
   s.require_paths << 'lib'
-  s.has_rdoc = true
-  s.extra_rdoc_files = ['README.rdoc','yukkuri-ranking-aggregator.rdoc']
-  s.rdoc_options << '--title' << 'yukkuri-ranking-aggregator' << '--main' << 'README.rdoc' << '-ri'
+  # s.has_rdoc = true
+  # s.extra_rdoc_files = ['README.rdoc','yukkuri-ranking-aggregator.rdoc']
+  # s.rdoc_options << '--title' << 'yukkuri-ranking-aggregator' << '--main' << 'README.rdoc' << '-ri'
   s.bindir = 'bin'
   s.executables << 'yukkuri-ranking-aggregator'
   s.add_development_dependency 'rake'
