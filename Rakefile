@@ -7,17 +7,15 @@ require 'logger'
 require 'yukkuri-ranking-aggregator'
 config = YAML.load_file("./config/config.yml")
 
-
 namespace :db do
   task :migrate => [:set_db_logger, :connect_db] do
-    ActiveRecord::Base.establish_connection config["database"]
     ActiveRecord::Migrator.migrate('db/migrate', ENV["VERSION"] ? ENV["VERSION"].to_i : nil )
   end
 
   task :create => :set_db_logger do
     # DB作成前なので、establish_connectionにdatabaseというキーのあるハッシュを渡すとエラーになる。
-    ActiveRecord::Base.establish_connection config.dup.tap {|s| s.delete "database" }
-    ActiveRecord::Base.connection.create_database config["database"]
+    ActiveRecord::Base.establish_connection config["database"].dup.tap {|s| s.delete "database" }
+    ActiveRecord::Base.connection.create_database config["database"]["database"]
   end
 end
 
@@ -38,7 +36,7 @@ namespace :aggregate do
 end
 
 task :connect_db do
-  ActiveRecord::Base.establish_connection config
+  ActiveRecord::Base.establish_connection config["database"]
 end
 
 task :set_db_logger do
