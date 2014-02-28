@@ -3,23 +3,17 @@ require File.join([File.dirname(__FILE__),'lib','yukkuri-ranking-aggregator','ve
 spec = Gem::Specification.new do |s|
   s.name = 'yukkuri-ranking-aggregator'
   s.version = NiconicoRankingCrawler::VERSION
-  s.author = 'Your Name Here'
-  s.email = 'your@email.address.com'
-  s.homepage = 'http://your.website.com'
+  s.author = 'Masami Yonehara(hdemon)'
+  s.email = 'zeitdiebe@gmail.com'
+  s.homepage = 'http://hdemon.net'
   s.platform = Gem::Platform::RUBY
-  s.summary = 'A description of your project'
+  s.summary = 'The data aggregator of Yukkuri Ranking'
 # Add your other files here if you make them
   s.files = %w(
-bin/yukkuri-ranking-aggregator
 lib/yukkuri-ranking-aggregator/version.rb
 lib/yukkuri-ranking-aggregator.rb
   )
   s.require_paths << 'lib'
-  # s.has_rdoc = true
-  # s.extra_rdoc_files = ['README.rdoc','yukkuri-ranking-aggregator.rdoc']
-  # s.rdoc_options << '--title' << 'yukkuri-ranking-aggregator' << '--main' << 'README.rdoc' << '-ri'
-  s.bindir = 'bin'
-  s.executables << 'yukkuri-ranking-aggregator'
   s.add_development_dependency 'rake'
   s.add_development_dependency 'rdoc'
   s.add_development_dependency 'rspec'
