@@ -1,5 +1,5 @@
-= niconico-ranking-crawler
+= yukkuri-ranking-aggregator
 
 Generate this with
-    niconico-ranking-crawler rdoc
+    yukkuri-ranking-aggregator rdoc
 After you have described your command line interface

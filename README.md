@@ -1,4 +1,4 @@
-# niconico-ranking-crawler
+# yukkuri-ranking-aggregator
 
 ## installation
 

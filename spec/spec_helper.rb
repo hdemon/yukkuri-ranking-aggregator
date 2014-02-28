@@ -6,11 +6,11 @@ require 'active_support/dependencies'
 # loaded once.
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
-$:.unshift File.expand_path("../../lib/niconico-ranking-crawler", __FILE__)
+$:.unshift File.expand_path("../../lib/yukkuri-ranking-aggregator", __FILE__)
 $:.unshift File.expand_path("../../lib", __FILE__)
 $:.unshift File.expand_path("../../config", __FILE__)
 
-ActiveSupport::Dependencies.autoload_paths << "lib/niconico-ranking-crawler"
+ActiveSupport::Dependencies.autoload_paths << "lib/yukkuri-ranking-aggregator"
 ActiveSupport::Dependencies.autoload_paths << "lib"
 ActiveSupport::Dependencies.autoload_paths << "config"
 

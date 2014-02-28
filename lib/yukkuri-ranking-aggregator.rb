@@ -1,4 +1,4 @@
-$:.unshift File.dirname(__FILE__) + "/niconico-ranking-crawler"
+$:.unshift File.dirname(__FILE__) + "/yukkuri-ranking-aggregator"
 
 require 'version.rb'
 require 'log'

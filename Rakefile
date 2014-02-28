@@ -4,7 +4,7 @@ require 'rubygems/package_task'
 require 'active_record'
 require 'yaml'
 require 'logger'
-require 'niconico-ranking-crawler'
+require 'yukkuri-ranking-aggregator'
 config = YAML.load_file("./config/config.yml")
 
 
