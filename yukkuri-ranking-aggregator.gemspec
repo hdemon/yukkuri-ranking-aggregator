@@ -1,7 +1,7 @@
 # Ensure we require the local version and not one we might have installed already
-require File.join([File.dirname(__FILE__),'lib','niconico-ranking-crawler','version.rb'])
+require File.join([File.dirname(__FILE__),'lib','yukkuri-ranking-aggregator','version.rb'])
 spec = Gem::Specification.new do |s|
-  s.name = 'niconico-ranking-crawler'
+  s.name = 'yukkuri-ranking-aggregator'
   s.version = NiconicoRankingCrawler::VERSION
   s.author = 'Your Name Here'
   s.email = 'your@email.address.com'
@@ -10,16 +10,16 @@ spec = Gem::Specification.new do |s|
   s.summary = 'A description of your project'
 # Add your other files here if you make them
   s.files = %w(
-bin/niconico-ranking-crawler
-lib/niconico-ranking-crawler/version.rb
-lib/niconico-ranking-crawler.rb
+bin/yukkuri-ranking-aggregator
+lib/yukkuri-ranking-aggregator/version.rb
+lib/yukkuri-ranking-aggregator.rb
   )
   s.require_paths << 'lib'
   s.has_rdoc = true
-  s.extra_rdoc_files = ['README.rdoc','niconico-ranking-crawler.rdoc']
-  s.rdoc_options << '--title' << 'niconico-ranking-crawler' << '--main' << 'README.rdoc' << '-ri'
+  s.extra_rdoc_files = ['README.rdoc','yukkuri-ranking-aggregator.rdoc']
+  s.rdoc_options << '--title' << 'yukkuri-ranking-aggregator' << '--main' << 'README.rdoc' << '-ri'
   s.bindir = 'bin'
-  s.executables << 'niconico-ranking-crawler'
+  s.executables << 'yukkuri-ranking-aggregator'
   s.add_development_dependency 'rake'
   s.add_development_dependency 'rdoc'
   s.add_development_dependency 'aruba'
