@@ -1,0 +1,12 @@
+database:
+  adapter: mysql2
+  encoding: utf8
+  host: 172.17.0.4
+  database: yukkuri
+  pool: 5
+  username: yukkuri
+  password: yukkuri
+  socket: /tmp/mysql.sock
+log_file_path: /tmp/crawler.log
+
+part_one_tag: "ゆっくり実況プレイpart1リンク or VOICEROID実況プレイPart1リンク"
