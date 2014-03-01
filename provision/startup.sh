@@ -1,7 +1,6 @@
 #!/bin/sh
 export PATH=$PATH:/usr/ruby/bin
 
-su app
 cd /home/app
 git clone https://github.com/hdemon/yukkuri-ranking-aggregator.git
 cd yukkuri-ranking-aggregator
