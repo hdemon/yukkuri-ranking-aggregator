@@ -1,0 +1,3 @@
+[submodule "app/yukkuri-ranking-server"]
+	path = app/yukkuri-ranking-server
+	url = git@github.com:hdemon/yukkuri-ranking-server.git
