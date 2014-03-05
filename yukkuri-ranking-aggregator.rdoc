@@ -1,5 +1,0 @@
-= yukkuri-ranking-aggregator
-
-Generate this with
-    yukkuri-ranking-aggregator rdoc
-After you have described your command line interface

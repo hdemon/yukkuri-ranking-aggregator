@@ -1,2 +1,15 @@
 source 'https://rubygems.org'
-gemspec
+
+gem 'rake'
+gem 'rdoc'
+gem 'rspec'
+gem 'webmock'
+gem 'database_cleaner'
+gem 'factory_girl'
+gem 'ffaker'
+gem 'pry'
+
+gem 'nicoquery'
+gem 'mysql2'
+gem 'activerecord', '~>4.0.0'
+gem 'whenever'
