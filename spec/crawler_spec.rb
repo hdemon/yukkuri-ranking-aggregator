@@ -1,5 +1,6 @@
 require 'spec_helper'
 require 'nicoquery'
+require 'crawler/crawler'
 require 'fixtures/part_one_movies_from_20130901_to_20130905'
 require 'fixtures/series_mylist/video_array_for_mylist_1001'
 

@@ -1,15 +1,36 @@
 source 'https://rubygems.org'
 
-gem 'rake'
-gem 'rdoc'
-gem 'rspec'
-gem 'webmock'
-gem 'database_cleaner'
-gem 'factory_girl'
-gem 'ffaker'
-gem 'pry'
+# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
+gem 'rails', '4.1.0.rc1'
+gem "mysql2"
+gem "unicorn"
+gem "nicoquery"
 
-gem 'nicoquery'
-gem 'mysql2'
-gem 'activerecord', '~>4.0.0'
-gem 'whenever'
+group :doc do
+end
+
+group :test do
+  gem "rspec"
+  gem "webmock"
+  gem "database_cleaner"
+  gem "factory_girl"
+  gem "ffaker"
+  gem "simplecov", require: false
+  gem "simplecov-rcov", require: false
+end
+
+group :development do
+  gem "better_errors"
+  gem "rspec-rails"
+  gem "rails-erd"
+  gem "binding_of_caller"
+  gem "quiet_assets"
+  gem "awesome_print"
+end
+
+group :test, :development do
+  gem "pry"
+  gem "pry-rails"
+end
+
+gem "whenever"
