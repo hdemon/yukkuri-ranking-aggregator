@@ -31,6 +31,9 @@ end
 group :test, :development do
   gem "pry"
   gem "pry-rails"
+  gem 'guard-rspec'
+  gem 'spring'
+  gem 'guard-spring'
 end
 
 gem "whenever"
