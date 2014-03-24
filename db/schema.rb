@@ -11,19 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140121000000) do
-
-  create_table "daily_rankings", force: true do |t|
-    t.integer  "movie_id"
-    t.integer  "view_counter"
-    t.integer  "mylist_counter"
-    t.integer  "comment_num"
-    t.datetime "created_at"
-  end
-
-  add_index "daily_rankings", ["comment_num"], name: "index_daily_rankings_on_comment_num", using: :btree
-  add_index "daily_rankings", ["mylist_counter"], name: "index_daily_rankings_on_mylist_counter", using: :btree
-  add_index "daily_rankings", ["view_counter"], name: "index_daily_rankings_on_view_counter", using: :btree
+ActiveRecord::Schema.define(version: 20140119100000) do
 
   create_table "movie_logs", force: true do |t|
     t.integer  "movie_id",       null: false

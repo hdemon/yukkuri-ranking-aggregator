@@ -18,7 +18,6 @@ describe Crawler do
         # second page
         WebMock.stub_request(:get, "http://www.nicovideo.jp/tag/%E3%82%86%E3%81%A3%E3%81%8F%E3%82%8A%E5%AE%9F%E6%B3%81%E3%83%97%E3%83%AC%E3%82%A4part1%E3%83%AA%E3%83%B3%E3%82%AF%20or%20VOICEROID%E5%AE%9F%E6%B3%81%E3%83%97%E3%83%AC%E3%82%A4Part1%E3%83%AA%E3%83%B3%E3%82%AF?numbers=1&order=d&page=2&rss=2.0&sort=f")
           .to_return(status: 200, body: Fixture.part_one_movies_from_20130901_to_20130905_page2)
-
         Crawler.get_latest_part1_movie_from_web
       end
 
