@@ -3,8 +3,11 @@ source 'https://rubygems.org'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.1.0.rc1'
 gem "mysql2"
+gem "whenever"
 gem "unicorn"
 gem "nicoquery"
+gem 'capistrano', '~> 3.1.0'
+gem 'capistrano-bundler', '~> 1.1.2'
 
 group :doc do
 end
@@ -28,12 +31,10 @@ group :development do
 end
 
 group :test, :development do
-  gem 'rspec-rails', '~> 3.0.0.beta2'
   gem "pry"
   gem "pry-rails"
+  gem 'rspec-rails', '~> 3.0.0.beta2'
   gem 'guard-rspec'
   gem 'spring'
   gem 'guard-spring'
 end
-
-gem "whenever"
