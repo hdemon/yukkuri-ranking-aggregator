@@ -1,4 +1,5 @@
 require "nicoquery"
+require "log"
 
 
 module Crawler

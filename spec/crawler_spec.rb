@@ -3,7 +3,14 @@ require 'nicoquery'
 require 'crawler/crawler'
 require 'fixtures/part_one_movies_from_20130901_to_20130905'
 require 'fixtures/series_mylist/video_array_for_mylist_1001'
-
+require 'fixtures/series_mylist/getthumbinfo_sm1001'
+require 'fixtures/series_mylist/getthumbinfo_sm1002'
+require 'fixtures/series_mylist/getthumbinfo_sm1003'
+require 'fixtures/series_mylist/getthumbinfo_sm2001'
+require 'fixtures/series_mylist/getthumbinfo_sm2002'
+require 'fixtures/series_mylist/getthumbinfo_sm2003'
+require 'fixtures/series_mylist/mylist_1001'
+require 'fixtures/series_mylist/mylist_2001'
 
 describe Crawler do
   describe ".get_latest_part1_movie_from_web" do

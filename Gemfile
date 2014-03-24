@@ -10,7 +10,7 @@ group :doc do
 end
 
 group :test do
-  gem "rspec"
+  gem 'rspec', '~> 3.0.0.beta2'
   gem "webmock"
   gem "database_cleaner"
   gem "factory_girl"
@@ -21,7 +21,6 @@ end
 
 group :development do
   gem "better_errors"
-  gem "rspec-rails"
   gem "rails-erd"
   gem "binding_of_caller"
   gem "quiet_assets"
@@ -29,6 +28,7 @@ group :development do
 end
 
 group :test, :development do
+  gem 'rspec-rails', '~> 3.0.0.beta2'
   gem "pry"
   gem "pry-rails"
   gem 'guard-rspec'
