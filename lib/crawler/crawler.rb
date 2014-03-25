@@ -1,5 +1,7 @@
+require 'active_support/dependencies.rb'
+ActiveSupport::Dependencies.autoload_paths << Rails.root.to_s + '/app/models'
+ActiveSupport::Dependencies.autoload_paths << Rails.root.to_s + '/lib'
 require "nicoquery"
-require "log"
 
 
 module Crawler
