@@ -16,3 +16,4 @@
 /tmp
 
 db/database.log
+config/database.yml
