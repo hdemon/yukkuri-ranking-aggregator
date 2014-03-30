@@ -1,4 +1,4 @@
-FROM hdemon/docker-simple-ruby-env
+FROM hdemon/simple-ruby-env
 
 MAINTAINER Masami Yonehara(zeitdiebe@gmail.com)
 
@@ -6,6 +6,7 @@ ENV PATH /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/ruby/
 ENV RBENV_ROOT /home/app/.rbenv
 USER app
 
+ADD ./database.yml /tmp/database.yml
 ADD ./startup.sh /home/app/startup.sh
 RUN chmod +x /home/app/startup.sh
 
