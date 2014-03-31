@@ -32,9 +32,7 @@ test:
 #   sqlite3://myuser:mypass@localhost/full/path/to/somedatabase
 #
 production:
-  url: <%= ENV["DATABASE_URL"] %>
-  adapter: mysql2
-  encoding: utf8
+  <<: *default
   host: 127.0.0.1
   database: yukkuri
   username: root
