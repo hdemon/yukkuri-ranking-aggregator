@@ -1,0 +1,33 @@
+<%= form_for(@mylist_log) do |f| %>
+  <% if @mylist_log.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@mylist_log.errors.count, "error") %> prohibited this mylist_log from being saved:</h2>
+
+      <ul>
+      <% @mylist_log.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :mylist_id %><br>
+    <%= f.number_field :mylist_id %>
+  </div>
+  <div class="field">
+    <%= f.label :amount_of_view %><br>
+    <%= f.number_field :amount_of_view %>
+  </div>
+  <div class="field">
+    <%= f.label :amount_of_mylist %><br>
+    <%= f.number_field :amount_of_mylist %>
+  </div>
+  <div class="field">
+    <%= f.label :amount_of_comment %><br>
+    <%= f.number_field :amount_of_comment %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

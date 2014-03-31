@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Mylist:</strong>
+  <%= @mylist_log.mylist_id %>
+</p>
+
+<p>
+  <strong>Amount of view:</strong>
+  <%= @mylist_log.amount_of_view %>
+</p>
+
+<p>
+  <strong>Amount of mylist:</strong>
+  <%= @mylist_log.amount_of_mylist %>
+</p>
+
+<p>
+  <strong>Amount of comment:</strong>
+  <%= @mylist_log.amount_of_comment %>
+</p>
+
+<%= link_to 'Edit', edit_mylist_log_path(@mylist_log) %> |
+<%= link_to 'Back', mylist_logs_path %>

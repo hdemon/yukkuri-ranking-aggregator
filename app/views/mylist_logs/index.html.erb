@@ -1,0 +1,31 @@
+<h1>Listing mylist_logs</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Mylist</th>
+      <th>Amount of view</th>
+      <th>Amount of mylist</th>
+      <th>Amount of comment</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @mylist_logs.each do |mylist_log| %>
+      <tr>
+        <td><%= mylist_log.mylist_id %></td>
+        <td><%= mylist_log.amount_of_view %></td>
+        <td><%= mylist_log.amount_of_mylist %></td>
+        <td><%= mylist_log.amount_of_comment %></td>
+        <td><%= link_to 'Show', mylist_log %></td>
+        <td><%= link_to 'Edit', edit_mylist_log_path(mylist_log) %></td>
+        <td><%= link_to 'Destroy', mylist_log, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Mylist log', new_mylist_log_path %>
