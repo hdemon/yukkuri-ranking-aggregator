@@ -9,6 +9,5 @@ rbenv exec bundle --path vendor/bundle -j4
 rbenv exec bundle exec rake db:create RAILS_ENV=production
 rbenv exec bundle exec rake db:migrate RAILS_ENV=production
 
-sudo mkdir -p /var/spool/cron/crontabs
-sudo echo "10 17 * * * /bin/bash -l -c 'cd /home/app/yukkuri-ranking-aggregator && bundle exec rake crawl:daily >> /var/log/cron_log.log 2>&1'" >> /var/spool/cron/crontabs/app
-cron -f
+echo "10 17 * * * /bin/bash -l -c 'cd /home/app/yukkuri-ranking-aggregator && bundle exec rake crawl:daily >> /var/log/cron_log.log 2>&1'" | sudo -u app crontab -
+sudo cron -f
