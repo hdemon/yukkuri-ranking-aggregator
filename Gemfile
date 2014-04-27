@@ -36,5 +36,6 @@ group :test, :development do
   gem 'rspec-rails', '~> 3.0.0.beta2'
   gem 'guard-rspec'
   gem 'spring'
+  gem 'spring-commands-rspec'
   gem 'guard-spring'
 end
