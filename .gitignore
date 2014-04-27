@@ -17,3 +17,4 @@
 
 db/database.log
 config/database.yml
+npm-debug.log
