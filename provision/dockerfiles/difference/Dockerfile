@@ -1,4 +1,4 @@
-FROM hdemon/yukkuri-ranking-aggregator-difference
+FROM hdemon/yukkuri-ranking-aggregator-base
 
 MAINTAINER Masami Yonehara(zeitdiebe@gmail.com)
 
